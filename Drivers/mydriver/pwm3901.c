@@ -10,13 +10,13 @@ void registerWrite(uint8_t reg, uint8_t value)
 
     reg |= 0x80u;
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, GPIO_PIN_RESET);
-    HAL_Delay(5);
+    //HAL_Delay(5);
     HAL_SPI_Transmit(&hspi1, &reg, 1, 1000);
-    HAL_Delay(5);
+    //HAL_Delay(5);
     HAL_SPI_Transmit(&hspi1, &value, 1, 1000);
-    HAL_Delay(5);
+    //HAL_Delay(5);
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, GPIO_PIN_SET);
-    HAL_Delay(5);
+    //HAL_Delay(5);
 }
 
 void readMotion(motionBurst_t *motion)
@@ -24,15 +24,16 @@ void readMotion(motionBurst_t *motion)
     u8 buff[11];
     u16 i;
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, GPIO_PIN_RESET); //使能器件
-    HAL_Delay(5);
+    //HAL_Delay(5);
     HAL_SPI_Transmit(&hspi1, &add, 1, 1000);
-    HAL_Delay(5);
+    //HAL_Delay(5);
     HAL_SPI_TransmitReceive(&hspi1, buff, buff, 12, 100000);
     // for(i=0; i<12; i++)
     // {
     //     buff[i]=SPI1_ReadWriteByte(0XFF);   //循环读数
     // }
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, GPIO_PIN_SET); //取消片选
+	
     memcpy(motion, buff, sizeof(motionBurst_t));
     uint16_t realShutter = (motion->shutter >> 8) & 0x0FF;
     realShutter |= (motion->shutter & 0x0ff) << 8;
@@ -44,60 +45,60 @@ static uint8_t registerRead(uint8_t reg)
     uint8_t data = 0;
     reg &= ~0x80u;
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, GPIO_PIN_RESET);
-    HAL_Delay(5);
+    //HAL_Delay(5);
     HAL_SPI_Transmit(&hspi1, &reg, 1, 1000);
-    HAL_Delay(5);
+    //HAL_Delay(5);
     HAL_SPI_TransmitReceive(&hspi1, &data, &data, 1, 100000);
     // data=SPI1_ReadWriteByte(reg);
-    HAL_Delay(5);
+    //HAL_Delay(5);
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, GPIO_PIN_SET);
-    HAL_Delay(5);
+    //HAL_Delay(5);
     return data;
 }
 
 static void InitRegisters(void)
 {
-    u8 data, data2;
-    registerWrite(0x7F, 0x00);
-    registerWrite(0x55, 0x01);
-    registerWrite(0x50, 0x07);
-    while (1)
-    {
-        registerWrite(0x43, 0x10);
-        data = registerRead(0x47);
-        if (data != 0x08)
-            break;
-    }
-    data = registerRead(0x47);
-    data &= 0x80;
-    if (data == 0x80)
-        registerWrite(0x48, 0x04);
-    else
-        registerWrite(0x48, 0x02);
+//    u8 data, data2;
+//    registerWrite(0x7F, 0x00);
+//    registerWrite(0x55, 0x01);
+//    registerWrite(0x50, 0x07);
+//    while (1)
+//    {
+//        registerWrite(0x43, 0x10);
+//        data = registerRead(0x47);
+//        if (data != 0x08)
+//            break;
+//    }
+//    data = registerRead(0x47);
+//    data &= 0x80;
+//    if (data == 0x80)
+//        registerWrite(0x48, 0x04);
+//    else
+//        registerWrite(0x48, 0x02);
 
-    registerWrite(0x7F, 0x00);
-    registerWrite(0x51, 0x7B);
-    registerWrite(0x50, 0x00);
-    registerWrite(0x55, 0x00);
-    registerWrite(0x7F, 0x0E);
+//    registerWrite(0x7F, 0x00);
+//    registerWrite(0x51, 0x7B);
+//    registerWrite(0x50, 0x00);
+//    registerWrite(0x55, 0x00);
+//    registerWrite(0x7F, 0x0E);
 
-    data = registerRead(0x47);
-    if (data == 0x80)
-    {
-        data = registerRead(0x70);
-        if (data > 28)
-            data += 11;
-        else
-            data += 14;
-        data2 = registerRead(0x71);
-        data2 = (data2 * 45) / 100;
-        registerWrite(0x7F, 0x00);
-        registerWrite(0x61, 0xAD);
-        registerWrite(0x51, 0x70);
-        registerWrite(0x7F, 0x0E);
-        registerWrite(0x70, data);
-        registerWrite(0x71, data2);
-    }
+//    data = registerRead(0x47);
+//    if (data == 0x80)
+//    {
+//        data = registerRead(0x70);
+//        if (data > 28)
+//            data += 11;
+//        else
+//            data += 14;
+//        data2 = registerRead(0x71);
+//        data2 = (data2 * 45) / 100;
+//        registerWrite(0x7F, 0x00);
+//        registerWrite(0x61, 0xAD);
+//        registerWrite(0x51, 0x70);
+//        registerWrite(0x7F, 0x0E);
+//        registerWrite(0x70, data);
+//        registerWrite(0x71, data2);
+//    }
 
     registerWrite(0x7F, 0x00);
     registerWrite(0x61, 0xAD);
@@ -158,7 +159,7 @@ static void InitRegisters(void)
     registerWrite(0x7F, 0x07);
     registerWrite(0x40, 0x41);
     registerWrite(0x70, 0x00);
-    HAL_Delay(1500);
+    HAL_Delay(15);
     registerWrite(0x32, 0x44);
     registerWrite(0x7F, 0x07);
     registerWrite(0x40, 0x40);
@@ -179,15 +180,26 @@ u8 opticalFlowInit(void)
 {
     u8 chipId = 0;
     u8 invChipId = 0;
-    HAL_Delay(5);
-
+    HAL_Delay(1);
+		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, GPIO_PIN_SET);
+	HAL_Delay(2);
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, GPIO_PIN_RESET);
+	HAL_Delay(2);
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, GPIO_PIN_SET);
+	HAL_Delay(2);
     chipId = registerRead(0x00);
     invChipId = registerRead(0x5f);
     if (chipId != 0x49 || invChipId != 0xB6)
         return 0;
     registerWrite(0x3a, 0x5a);
-    HAL_Delay(5);
+    HAL_Delay(50);
+		registerRead(0x2);
+		registerRead(0x3);
+		registerRead(0x4);
+		registerRead(0x5);
+		registerRead(0x6);
+		HAL_Delay(1);
     InitRegisters();
-    HAL_Delay(5);
+    HAL_Delay(1);
     return 1;
 }

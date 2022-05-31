@@ -21,7 +21,7 @@ Target DLL:      Segger\JL2CM3.dll V2.99.31.0
 Dialog DLL:      TCM.DLL V1.36.1.0
  
 <h2>Project:</h2>
-C:\Users\liangyuezhe\Desktop\tt\tt\MDK-ARM\tt.uvprojx
+C:\Users\liangyuezhe\Documents\GitHub\HAL_sensor_test\MDK-ARM\tt.uvprojx
 Project File Date:  05/31/2022
 
 <h2>Output:</h2>
@@ -30,11 +30,13 @@ Build target 'tt'
 compiling main.c...
 ..\Drivers\mydriver\pwm3901.h(40): warning:  #1-D: last line of file ends without a newline
   u8 opticalFlowInit(void);
-../Core/Src/main.c: 1 warning, 0 errors
+../Core/Src/main.c(206): warning:  #177-D: variable "ledState"  was declared but never referenced
+      static unsigned char ledState = 0;
+../Core/Src/main.c: 2 warnings, 0 errors
 linking...
-Program Size: Code=8708 RO-data=360 RW-data=16 ZI-data=1328  
+Program Size: Code=11916 RO-data=360 RW-data=16 ZI-data=1328  
 FromELF: creating hex file...
-"tt\tt.axf" - 0 Error(s), 1 Warning(s).
+"tt\tt.axf" - 0 Error(s), 2 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -57,7 +59,7 @@ Package Vendor: Keil
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.1.2
-Build Time Elapsed:  00:00:01
+Build Time Elapsed:  00:00:02
 </pre>
 </body>
 </html>

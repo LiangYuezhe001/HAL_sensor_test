@@ -27,6 +27,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "pwm3901.h"
+#include <stdio.h>
+#include "ANO_DT.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -48,6 +50,7 @@
 
 /* USER CODE BEGIN PV */
 motionBurst_t currentMotion;
+//int sumx=0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -59,6 +62,12 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+int fputc(int ch,FILE * fp)
+{
+ HAL_UART_Transmit(&huart1,(uint8_t * )&ch,1,0xffff);
+ return ch;
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -68,7 +77,9 @@ void SystemClock_Config(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+float dx,odx=0,ddx,sumx=0,osumx=0;
+float dy,ody=0,ddy,sumy=0,osumy=0;
+	int i=0,j=0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -90,31 +101,60 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_SPI1_Init();
-  MX_TIM1_Init();
   MX_TIM6_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
 	opticalFlowInit();
+	//HAL_TIM_Base_Start_IT(&htim6);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
-  {	
-		HAL_GPIO_WritePin(GPIOA,GPIO_PIN_3,GPIO_PIN_RESET);
-		uint8_t add = 0x00;
-		HAL_SPI_Transmit(&hspi1, &add, 1, 1000);
-		HAL_SPI_Transmit(&hspi1, &add, 1, 1000);
-		add = 0x5f;
-		HAL_SPI_Transmit(&hspi1, &add, 1, 1000);
-		HAL_SPI_Transmit(&hspi1, &add, 1, 1000);
-		add = 0x01;
-		HAL_SPI_Transmit(&hspi1, &add, 1, 1000);
-		HAL_SPI_Transmit(&hspi1, &add, 1, 1000);
-		add = 0x02;
-		HAL_SPI_Transmit(&hspi1, &add, 1, 1000);
-		HAL_SPI_Transmit(&hspi1, &add, 1, 1000);
-		HAL_GPIO_WritePin(GPIOA,GPIO_PIN_3,GPIO_PIN_SET);
+  {					HAL_Delay(10);
+						readMotion(&currentMotion);
+            dx=currentMotion.deltaX;
+						dy=currentMotion.deltaY;
+            if(dx>=100)dx=00;
+            if(dx<=-100)dx=00;
+						if(dy>=100)dy=00;
+            if(dy<=-100)dy=00;
+            if(j==0)
+            {
+                if(i<500)
+                {
+                    sumx+=dx;
+										sumy+=dy;
+                    i++;
+                }
+                else
+                {
+                    j=1;
+                    ddx=sumx/500;
+										ddy=sumy/500;
+
+                }
+            }
+            else {
+								
+                dx-=ddx;
+								dy-=ddy;
+								dx=0.1*odx+0.9*dx;
+								odx=dx;
+								dy=0.1*ody+0.9*dy;
+								ody=dy;
+                
+								sumx+=dx;
+								sumx=osumx*0.1+sumx*0.9;
+								osumx=sumx;
+								
+								sumy+=dy;
+								sumy=osumy*0.1+sumy*0.9;
+								osumy=sumy;
+							
+                ANO_DT_Send_Senser(sumx,sumy,0,0,0,0,0,0,0,0);
+            }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -161,7 +201,15 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+    static unsigned char ledState = 0;
+    if (htim == (&htim6))
+    {
+//      readMotion(&currentMotion);
+//			printf("%d",currentMotion.deltaX);
+    }
+}
 /* USER CODE END 4 */
 
 /**

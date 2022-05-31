@@ -39,7 +39,7 @@ extern UART_HandleTypeDef huart1;
 void MX_USART1_UART_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-
+void Usart_Send(u8 *data_to_send, u8 length);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

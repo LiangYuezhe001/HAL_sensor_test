@@ -131,8 +131,8 @@ void ANO_DT_Send_Data(u8 *dataToSend , u8 length)
 	Usb_Hid_Adddata(data_to_send,length);
 #endif
 #ifdef ANO_DT_USE_USART2
-	//Usart_Send(data_to_send, length);
-	 HAL_UART_Transmit(&huart1,data_to_send, length,100000);
+	Usart_Send(data_to_send, length);
+	 //HAL_UART_Transmit(&huart1,data_to_send,length,1000);
 #endif
 }
 

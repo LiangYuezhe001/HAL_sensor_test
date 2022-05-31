@@ -34,3 +34,5 @@ tt\main.o: ../Core/Inc/tim.h
 tt\main.o: ../Core/Inc/usart.h
 tt\main.o: ../Core/Inc/gpio.h
 tt\main.o: ..\Drivers\mydriver\pwm3901.h
+tt\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+tt\main.o: ..\Drivers\mydriver\ANO_DT.h
