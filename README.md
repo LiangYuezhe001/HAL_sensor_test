@@ -1,2 +1,3 @@
 # HAL_sensor_test
- hal库的传感器测试
+ stm32 hal库的传感器测试
+ 包括pwm3901，9250。。。
