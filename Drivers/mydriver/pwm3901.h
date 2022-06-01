@@ -1,5 +1,4 @@
-//#include "sys.h"
-#include "main.h"
+#include "sys.h"
 #if defined(__CC_ARM)
 #pragma anon_unions /*??????????*/
 #endif

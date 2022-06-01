@@ -103,6 +103,7 @@ float dy,ody=0,ddy,sumy=0,osumy=0;
   MX_SPI1_Init();
   MX_TIM6_Init();
   MX_USART1_UART_Init();
+  MX_TIM7_Init();
   /* USER CODE BEGIN 2 */
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
 	opticalFlowInit();
