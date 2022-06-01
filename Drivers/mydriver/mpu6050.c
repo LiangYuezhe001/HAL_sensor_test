@@ -26,7 +26,7 @@ u8 MPU_Init(void)
 	MPU_Write_Byte(MPU_FIFO_EN_REG, 0X00);	 //关闭FIFO
 	MPU_Write_Byte(MPU_INTBP_CFG_REG, 0X80); // INT引脚低电平有效
 	res = MPU_Read_Byte(MPU_DEVICE_ID_REG);
-	if (res == MPU_ADDR) //器件ID正确
+	if (res == 0x70) //器件ID正确
 	{
 		MPU_Write_Byte(MPU_PWR_MGMT1_REG, 0X01); //设置CLKSEL,PLL X轴为参考
 		MPU_Write_Byte(MPU_PWR_MGMT2_REG, 0X00); //加速度与陀螺仪都工作
@@ -119,6 +119,23 @@ u8 MPU_Get_Gyroscope(short *gx, short *gy, short *gz)
 	return res;
 	;
 }
+u8 Get_Gyro(float* gyro)
+{
+	u8 buf[6], res;
+	short raw_gyro[3];
+	res = MPU_Read_Len(MPU_ADDR, MPU_GYRO_XOUTH_REG, 6, buf);
+	if (res == 0)
+	{
+		raw_gyro[0] = ((u16)buf[0] << 8) | buf[1];
+		raw_gyro[1] = ((u16)buf[2] << 8) | buf[3];
+		raw_gyro[2] = ((u16)buf[4] << 8) | buf[5];
+	}
+	gyro[0]=raw_gyro[0]/0x83;
+	gyro[1]=raw_gyro[1]/0x83;
+	gyro[2]=raw_gyro[2]/0x83;
+	return res;
+	;
+}
 //得到加速度值(原始值)
 // gx,gy,gz:陀螺仪x,y,z轴的原始读数(带符号)
 //返回值:0,成功
@@ -136,6 +153,25 @@ u8 MPU_Get_Accelerometer(short *ax, short *ay, short *az)
 	return res;
 	;
 }
+
+u8 Get_Acc(float* acc)
+{
+	u8 buf[6], res;
+	short raw_acc[3];
+	res = MPU_Read_Len(MPU_ADDR, MPU_ACCEL_XOUTH_REG, 6, buf);
+	if (res == 0)
+	{
+		raw_acc[0] = ((u16)buf[0] << 8) | buf[1];
+		raw_acc[1] = ((u16)buf[2] << 8) | buf[3];
+		raw_acc[2] = ((u16)buf[4] << 8) | buf[5];
+	}
+	acc[0]=raw_acc[0]/0x3fff;
+	acc[1]=raw_acc[1]/0x3fff;
+	acc[2]=raw_acc[2]/0x3fff;
+	return res;
+	;
+}
+
 // IIC连续写
 // addr:器件地址
 // reg:寄存器地址
@@ -244,11 +280,11 @@ u8 MPU_Read_Byte(u8 reg)
 	return res;
 }
 
-void calibrate_acc(float x,float y,float z)
-{double a,b,v;
-	a=atan(x/z);
-	b=atan(y/z);
-	
-	
-	
-}
+//void calibrate_acc(float x,float y,float z)
+//{
+//	
+//	double a,b,v;
+//	a=atan(x/z);
+//	b=atan(y/z);
+//	
+//}

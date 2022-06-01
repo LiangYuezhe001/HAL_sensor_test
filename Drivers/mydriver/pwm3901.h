@@ -32,6 +32,7 @@ typedef __packed struct motionBurst_s
     uint16_t shutter;
 } motionBurst_t;
 
+u8 getandsend(void);
 void registerWrite(uint8_t reg, uint8_t value);
 void readMotion(motionBurst_t *motion);
 static uint8_t registerRead(uint8_t reg);

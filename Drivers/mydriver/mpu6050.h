@@ -103,6 +103,8 @@ u8 MPU_Set_Accel_Fsr(u8 fsr);
 u8 MPU_Set_LPF(u16 lpf);
 u8 MPU_Set_Rate(u16 rate);
 u8 MPU_Set_Fifo(u8 sens);
+u8 Get_Gyro(float* gyro);
+u8 Get_Acc(float* acc);
 
 void calibrate_acc(float x,float y,float z);
 short MPU_Get_Temperature(void);

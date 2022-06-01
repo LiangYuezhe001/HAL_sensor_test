@@ -5,7 +5,58 @@
 #include "usart.h"
 #include "sys.h"
 #include "tim.h"
+#include "ANO_DT.h"
 #define NCS_PIN PAout(3)
+
+u8 getandsend(void)
+{   motionBurst_t currentMotion;
+    float dx,odx=0,ddx,sumx=0,osumx=0;
+    float dy,ody=0,ddy,sumy=0,osumy=0;
+    int i=0,j=0;
+    readMotion(&currentMotion);
+    dx=currentMotion.deltaX;
+    dy=currentMotion.deltaY;
+    if(dx>=100)dx=00;
+    if(dx<=-100)dx=00;
+    if(dy>=100)dy=00;
+    if(dy<=-100)dy=00;
+    if(j==0)
+    {
+        if(i<500)
+        {
+            sumx+=dx;
+            sumy+=dy;
+            i++;
+        }
+        else
+        {
+            j=1;
+            ddx=sumx/500;
+            ddy=sumy/500;
+
+        }
+    }
+    else {
+
+        dx-=ddx;
+        dy-=ddy;
+        dx=0.1*odx+0.9*dx;
+        odx=dx;
+        dy=0.1*ody+0.9*dy;
+        ody=dy;
+
+        sumx+=dx;
+        sumx=osumx*0.1+sumx*0.9;
+        osumx=sumx;
+
+        sumy+=dy;
+        sumy=osumy*0.1+sumy*0.9;
+        osumy=sumy;
+
+        ANO_DT_Send_Senser(sumx,sumy,0,0,0,0,0,0,0,0);
+    }
+    return 1;
+}
 
 void registerWrite(uint8_t reg, uint8_t value)
 {
