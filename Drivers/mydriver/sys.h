@@ -1,6 +1,6 @@
 //
 #include "stm32f1xx_hal.h"
-
+#include <stdbool.h>
 typedef int32_t  s32;
 typedef int16_t s16;
 typedef int8_t  s8;

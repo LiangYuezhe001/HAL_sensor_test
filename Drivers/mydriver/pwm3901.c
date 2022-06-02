@@ -234,6 +234,7 @@ u8 opticalFlowInit(void)
     u8 chipId = 0;
     u8 invChipId = 0;
     HAL_Delay(1);
+		PAout(2) =1;//get those off 
     NCS_PIN = 1;
     HAL_Delay(2);
     NCS_PIN = 0;
