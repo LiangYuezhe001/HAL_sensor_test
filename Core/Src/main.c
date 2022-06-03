@@ -33,6 +33,7 @@
 #include "mpu6050.h"
 #include "mpu9250.h"
 #include "Kalman_Filter.h"
+#include "ak8963.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -108,17 +109,21 @@ int main(void)
   MX_USART1_UART_Init();
   MX_TIM7_Init();
   /* USER CODE BEGIN 2 */
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
+	
+	//HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
 	//opticalFlowInit();
-	MPU_Init();
+	//MPU_Init();
 	//HAL_TIM_Base_Start_IT(&htim6);
+	//Mpu9250Init();
+	i2cdevWriteBit(0, MPU_ADDR, MPU6500_RA_INT_PIN_CFG, 1, 1);//set 6500 bypass mode
+	i2cdevReadByte(0, AK8963_ADDRESS_00, AK8963_RA_WIA, buff);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {					
-		Mpu9250Init();
+		
 		i2cdevRead(1, MPU_ADDR, MPU6500_RA_ACCEL_XOUT_H, 29, buff);
 		HAL_Delay(1);
 		//printf("sb");

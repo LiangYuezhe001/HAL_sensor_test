@@ -28,7 +28,7 @@ void ak8963Init()
  */
 bool ak8963TestConnection()
 {
-	if (i2cdevReadByte(I2Cx, AK8963_ADDRESS_10, AK8963_RA_WIA, buffer) == 1)
+	if (i2cdevReadByte(I2Cx, AK8963_ADDRESS_00, AK8963_RA_WIA, buffer) == 1)
 	{
 		return (buffer[0] == 0x48);
 	}
