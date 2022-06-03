@@ -21,7 +21,7 @@ u8 MPU_Init(void)
 	MPU_Set_Gyro_Fsr(0);					 //мсбщрг╢╚╦пфВ,║ю250dps
 	MPU_Set_Accel_Fsr(0);					 //╪скы╤х╢╚╦пфВ,║ю2g
 	MPU_Set_Rate(200);						 //иХжц╡ияЫбй50Hz
-	MPU_Write_Byte(MPU_INT_EN_REG, 0X00);	 //╧ь╠укЫспжп╤о
+	MPU_Write_Byte(MPU_INT_EN_REG, 0X00);	 //╧ь╠укЫспжп╤оо
 	MPU_Write_Byte(MPU_USER_CTRL_REG, 0X00); // I2CжВдёй╫╧ь╠у
 	MPU_Write_Byte(MPU_FIFO_EN_REG, 0X00);	 //╧ь╠уFIFO
 	MPU_Write_Byte(MPU_INTBP_CFG_REG, 0X80); // INTрЩ╫е╣м╣Гф╫спп╖

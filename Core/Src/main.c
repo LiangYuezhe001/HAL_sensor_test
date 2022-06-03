@@ -31,6 +31,7 @@
 #include "ANO_DT.h"
 #include "tim.h"
 #include "mpu6050.h"
+#include "mpu9250.h"
 #include "Kalman_Filter.h"
 /* USER CODE END Includes */
 
@@ -53,6 +54,7 @@
 
 /* USER CODE BEGIN PV */
 motionBurst_t currentMotion;
+u8 buff[30];
 //int sumx=0;
 /* USER CODE END PV */
 
@@ -116,10 +118,11 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {					
-		
+		Mpu9250Init();
+		i2cdevRead(1, MPU_ADDR, MPU6500_RA_ACCEL_XOUT_H, 29, buff);
 		HAL_Delay(1);
-		printf("sb");
-		Output();
+		//printf("sb");
+		//Output();
 					//getandsend();
     /* USER CODE END WHILE */
 
