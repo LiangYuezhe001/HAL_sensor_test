@@ -91,7 +91,7 @@ int main(void)
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
-//short gx,gy,gz;
+
   /* USER CODE BEGIN Init */
 
   /* USER CODE END Init */
@@ -115,18 +115,22 @@ int main(void)
 	//opticalFlowInit();
 	//MPU_Init();
 	//HAL_TIM_Base_Start_IT(&htim6);
-	//Mpu9250Init();
-	vl53lxxInit();
+	iicsearch();
+	Mpu9250Init();
+	u8 i = 0;
+	u8 f=0x76;
+	//vl53lxxInit();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {					
-		vl53l1x();
-		HAL_Delay(1);
-		//printf("sb");
-		//Output();
+		//i2cdevReadByte(0, f, i+0xf7, &buff[i]);
+		delay_us(500);
+		
+		//i2cdevRead(0, MPU_ADDR, MPU6500_RA_ACCEL_XOUT_H, 29, buff);
+		Output();
 		//getandsend();
     /* USER CODE END WHILE */
 

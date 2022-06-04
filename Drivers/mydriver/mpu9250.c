@@ -33,28 +33,36 @@ void sensorsSetupSlaveRead(void)
     i2cdevWriteBit(I2Cx, MPU_ADDR, MPU6500_RA_I2C_SLV1_CTRL, MPU6500_I2C_SLV_EN_BIT,1);//enable slave 1
 
     //set slave 2
-    i2cdevWriteByte(I2Cx, MPU_ADDR, MPU6500_RA_I2C_SLV2_ADDR,0x80|BMP280_I2C_ADDR);//set 8963 as slave 0
+    i2cdevWriteByte(I2Cx, MPU_ADDR, MPU6500_RA_I2C_SLV2_ADDR,0x80|BMP280_I2C_ADDR);//set 8963 as slave 2
     i2cdevWriteByte(I2Cx, MPU_ADDR, MPU6500_RA_I2C_SLV2_REG , BMP280_PRESSURE_MSB_REG);// set reg to read
     i2cdevWriteBits(I2Cx, MPU_ADDR, MPU6500_RA_I2C_SLV2_CTRL, MPU6500_I2C_SLV_LEN_BIT,
                     MPU6500_I2C_SLV_LEN_LENGTH, 6);// set num of reg to read
     i2cdevWriteBit(I2Cx, MPU_ADDR, MPU6500_RA_I2C_MST_DELAY_CTRL, 2, 1);
-    i2cdevWriteBit(I2Cx, MPU_ADDR, MPU6500_RA_I2C_SLV2_CTRL, MPU6500_I2C_SLV_EN_BIT,1);//enable slave 0
+    i2cdevWriteBit(I2Cx, MPU_ADDR, MPU6500_RA_I2C_SLV2_CTRL, MPU6500_I2C_SLV_EN_BIT,1);//enable slave 2
 }
 
 void Mpu9250Init(void)
 {
+	
+				
+	iicsearch();
+	i2cdevWriteBit(0, MPU_ADDR, MPU6500_RA_PWR_MGMT_1, MPU6500_PWR1_DEVICE_RESET_BIT, 1);
     if (MPU_Init() == 0)
-    {
+    {		
+				i2cdevWriteByte(0, MPU_ADDR, MPU6500_RA_INT_ENABLE, 0);
+				HAL_Delay(1);
         i2cdevWriteBit(0, MPU_ADDR, MPU6500_RA_INT_PIN_CFG, 1, 1);//set 6500 bypass mode
-        // allow iic to rw other divice
+				HAL_Delay(1);
+        // allow iic to r/w other divice
         printf("6500 I2C connection [OK].\n");
+			 iicsearch();
     }
     else
     {
         printf("6500 I2C connection [FAIL].\n");
     }
 
-   // MPU_Init(); //6500 basic init
+   // MPU_Init(); //6500 basic init 
 
     if (ak8963TestConnection() == true)
     {
@@ -75,7 +83,7 @@ void Mpu9250Init(void)
     {
         printf("AK8963 I2C connection [FAIL].\n");
     }
-    void sensorsSetupSlaveRead(void);
+   // void sensorsSetupSlaveRead(void);
 
 }
 

@@ -130,9 +130,9 @@ u8 Get_Gyro(float* gyro)
 		raw_gyro[1] = ((u16)buf[2] << 8) | buf[3];
 		raw_gyro[2] = ((u16)buf[4] << 8) | buf[5];
 	}
-	gyro[0]=raw_gyro[0]/0x83;
-	gyro[1]=raw_gyro[1]/0x83;
-	gyro[2]=raw_gyro[2]/0x83;
+	gyro[0]=(float)raw_gyro[0]/32767*250;
+	gyro[1]=(float)raw_gyro[1]/32767*250;
+	gyro[2]=(float)raw_gyro[2]/32767*250;
 	return res;
 	;
 }
@@ -165,9 +165,9 @@ u8 Get_Acc(float* acc)
 		raw_acc[1] = ((u16)buf[2] << 8) | buf[3];
 		raw_acc[2] = ((u16)buf[4] << 8) | buf[5];
 	}
-	acc[0]=raw_acc[0]/0x3fff;
-	acc[1]=raw_acc[1]/0x3fff;
-	acc[2]=raw_acc[2]/0x3fff;
+	acc[0]=(float)raw_acc[0]/32767*2;
+	acc[1]=(float)raw_acc[1]/32767*2;
+	acc[2]=(float)raw_acc[2]/32767*2;
 	return res;
 	;
 }

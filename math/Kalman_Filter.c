@@ -8,7 +8,7 @@ float Q_ROLL=0.001;
 float Q_PITCH=0.001;
 float R_ROLL;
 float R_PITCH=0.4;
-float dt=0.1;
+float dt=0.005;
 float DeltaPitch;
 float DeltaRoll;
 /* ËµÃ÷£º */
@@ -87,7 +87,7 @@ void KalmanCalculation(float*gyro ,float* acc_real)
     Pitch_Kalman = -Pitch_hat_pos;
     Roll_Kalman = Roll_hat_pos;
 		
-		ANO_DT_Send_Senser(Pitch_z,0,oo,0,0,-Pitch_Kalman,0,0,0,0);
+		ANO_DT_Send_Senser(Pitch_z,0,-Pitch_Kalman,0,0,0,0,0,0,0);
 
 }
 

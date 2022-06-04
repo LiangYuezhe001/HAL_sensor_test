@@ -23,7 +23,7 @@ u8 MPU_IIC_Read_Byte(unsigned char ack);//IIC读取一个字节
 u8 MPU_IIC_Wait_Ack(void); 				//IIC等待ACK信号
 void MPU_IIC_Ack(void);					//IIC发送ACK信号
 void MPU_IIC_NAck(void);				//IIC不发送ACK信号
-
+void iicsearch(void);
 
 u8 i2cdevReadByte(u8 dev, uint8_t devAddress, uint8_t memAddress, uint8_t *data);
 u8 i2cdevReadBit(u8 dev, uint8_t devAddress, uint8_t memAddress, uint8_t bitNum, uint8_t *data);
