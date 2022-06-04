@@ -18,14 +18,10 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
+
+/* USER CODE BEGIN 0 */
 #include "tim.h"
 #include "sys.h"
-/* USER CODE BEGIN 0 */
-
-/* USER CODE END 0 */
-
-TIM_HandleTypeDef htim6;
-TIM_HandleTypeDef htim7;
 
 void delay_us(u16 us)
 {   u16 differ = 0xffff-us-5;
@@ -38,10 +34,18 @@ void delay_us(u16 us)
     HAL_TIM_Base_Stop(&htim7);
 }
 
+
+
 void delay_ms(u16 ms)
 {
     delay_us(1000*ms);
 }
+/* USER CODE END 0 */
+
+TIM_HandleTypeDef htim6;
+TIM_HandleTypeDef htim7;
+
+
 
 /* TIM6 init function */
 void MX_TIM6_Init(void)

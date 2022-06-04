@@ -34,6 +34,7 @@
 #include "mpu9250.h"
 #include "Kalman_Filter.h"
 #include "ak8963.h"
+#include "vl53lxx.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -115,20 +116,18 @@ int main(void)
 	//MPU_Init();
 	//HAL_TIM_Base_Start_IT(&htim6);
 	//Mpu9250Init();
-	i2cdevWriteBit(0, MPU_ADDR, MPU6500_RA_INT_PIN_CFG, 1, 1);//set 6500 bypass mode
-	i2cdevReadByte(0, AK8963_ADDRESS_00, AK8963_RA_WIA, buff);
+	vl53lxxInit();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {					
-		
-		i2cdevRead(1, MPU_ADDR, MPU6500_RA_ACCEL_XOUT_H, 29, buff);
+		vl53l1x();
 		HAL_Delay(1);
 		//printf("sb");
 		//Output();
-					//getandsend();
+		//getandsend();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

@@ -27,8 +27,8 @@ static void vl53IICSendByte(u8 txd);	//iic发送一个字节
 static u8 vl53IICReceiveByte(u8 ack);	//iic读取一个字节
 
 //初始化iic
-//void vl53IICInit(void)
-//{	
+void vl53IICInit(void)
+{	
 //	GPIO_InitTypeDef GPIO_InitStructure;
 //	
 //	/*使能VL53时钟*/
@@ -43,7 +43,7 @@ static u8 vl53IICReceiveByte(u8 ack);	//iic读取一个字节
 
 //	GPIO_SetBits(GPIOB,GPIO_Pin_5);//PB5输出高
 //	GPIO_SetBits(GPIOB,GPIO_Pin_4);//PB4输出高
-//}
+}
 //产生VL53起始信号
 static void vl53IICStart(void)
 {

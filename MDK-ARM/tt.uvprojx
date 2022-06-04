@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F103xE</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include;..\Drivers\mydriver;..\math;..\Drivers\mydriver\VL53L1X</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include;..\Drivers\mydriver;..\math;..\Drivers\VL53L1X;..\Drivers\VL53L1X\vl53l1_platform;..\Drivers\mydriver\laser</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -562,21 +562,6 @@
               <FileType>5</FileType>
               <FilePath>..\Drivers\mydriver\mpu9250.h</FilePath>
             </File>
-            <File>
-              <FileName>vl53lxx.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Drivers\mydriver\vl53lxx.c</FilePath>
-            </File>
-            <File>
-              <FileName>vl53l1x.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Drivers\mydriver\vl53l1x.c</FilePath>
-            </File>
-            <File>
-              <FileName>vl53lxx_i2c.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Drivers\mydriver\vl53lxx_i2c.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -605,67 +590,92 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>VL53L1x</GroupName>
+          <GroupName>laser</GroupName>
+          <Files>
+            <File>
+              <FileName>vl53l1x.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\mydriver\laser\vl53l1x.c</FilePath>
+            </File>
+            <File>
+              <FileName>vl53lxx_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\mydriver\laser\vl53lxx_i2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>vl53lxx.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\mydriver\vl53lxx.c</FilePath>
+            </File>
+            <File>
+              <FileName>vl53l0x.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\mydriver\laser\vl53l0x.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>VL53L1</GroupName>
           <Files>
             <File>
               <FileName>vl53l1_api.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Drivers\mydriver\VL53L1X\vl53l1_api.c</FilePath>
+              <FilePath>..\Drivers\VL53L1X\vl53l1_api.c</FilePath>
             </File>
             <File>
               <FileName>vl53l1_api_calibration.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Drivers\mydriver\VL53L1X\vl53l1_api_calibration.c</FilePath>
+              <FilePath>..\Drivers\VL53L1X\vl53l1_api_calibration.c</FilePath>
             </File>
             <File>
               <FileName>vl53l1_api_core.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Drivers\mydriver\VL53L1X\vl53l1_api_core.c</FilePath>
+              <FilePath>..\Drivers\VL53L1X\vl53l1_api_core.c</FilePath>
             </File>
             <File>
               <FileName>vl53l1_api_debug.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Drivers\mydriver\VL53L1X\vl53l1_api_debug.c</FilePath>
+              <FilePath>..\Drivers\VL53L1X\vl53l1_api_debug.c</FilePath>
             </File>
             <File>
               <FileName>vl53l1_api_preset_modes.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Drivers\mydriver\VL53L1X\vl53l1_api_preset_modes.c</FilePath>
+              <FilePath>..\Drivers\VL53L1X\vl53l1_api_preset_modes.c</FilePath>
             </File>
             <File>
               <FileName>vl53l1_api_strings.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Drivers\mydriver\VL53L1X\vl53l1_api_strings.c</FilePath>
+              <FilePath>..\Drivers\VL53L1X\vl53l1_api_strings.c</FilePath>
             </File>
             <File>
               <FileName>vl53l1_core.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Drivers\mydriver\VL53L1X\vl53l1_core.c</FilePath>
+              <FilePath>..\Drivers\VL53L1X\vl53l1_core.c</FilePath>
             </File>
             <File>
               <FileName>vl53l1_core_support.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Drivers\mydriver\VL53L1X\vl53l1_core_support.c</FilePath>
+              <FilePath>..\Drivers\VL53L1X\vl53l1_core_support.c</FilePath>
             </File>
             <File>
               <FileName>vl53l1_error_strings.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Drivers\mydriver\VL53L1X\vl53l1_error_strings.c</FilePath>
+              <FilePath>..\Drivers\VL53L1X\vl53l1_error_strings.c</FilePath>
             </File>
             <File>
               <FileName>vl53l1_register_funcs.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Drivers\mydriver\VL53L1X\vl53l1_register_funcs.c</FilePath>
+              <FilePath>..\Drivers\VL53L1X\vl53l1_register_funcs.c</FilePath>
             </File>
             <File>
               <FileName>vl53l1_silicon_core.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Drivers\mydriver\VL53L1X\vl53l1_silicon_core.c</FilePath>
+              <FilePath>..\Drivers\VL53L1X\vl53l1_silicon_core.c</FilePath>
             </File>
             <File>
               <FileName>vl53l1_wait.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Drivers\mydriver\VL53L1X\vl53l1_wait.c</FilePath>
+              <FilePath>..\Drivers\VL53L1X\vl53l1_wait.c</FilePath>
             </File>
           </Files>
         </Group>

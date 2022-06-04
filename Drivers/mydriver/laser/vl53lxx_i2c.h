@@ -20,12 +20,12 @@
 ********************************************************************************/
 
 /*IO方向设置*/
-#define SDA_IN()  {GPIOB->MODER&=~(3<<(4*2));GPIOB->MODER|=0<<4*2;}	//PB4输入模式
-#define SDA_OUT() {GPIOB->MODER&=~(3<<(4*2));GPIOB->MODER|=1<<4*2;} //PB4输出模式
+#define SDA_IN()  {GPIOB->CRH&=0XFFF0FFFF;GPIOB->CRH|=8<<16;}	//PB4输入模式
+#define SDA_OUT() {GPIOB->CRH&=0XFFF0FFFF;GPIOB->CRH|=3<<16;} //PB4输出模式
 /*IO操作函数*/	 
-#define VL53_SCL    PBout(5) 	//SCL
-#define VL53_SDA    PBout(4) 	//SDA	 
-#define READ_SDA	PBin(4)  	//输入SDA 
+#define VL53_SCL    PBout(14) 	//SCL
+#define VL53_SDA    PBout(12) 	//SDA	 
+#define READ_SDA	PBin(12)  	//输入SDA 
 
 
 //VL53所有操作函数
