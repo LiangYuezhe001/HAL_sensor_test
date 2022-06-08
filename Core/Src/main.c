@@ -36,6 +36,7 @@
 #include "ak8963.h"
 #include "vl53lxx.h"
 #include "Ellipse_Fitting.h"
+#include "state_estimator.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -116,10 +117,11 @@ int main(void)
 	//opticalFlowInit();
 	//MPU_Init();
 	//HAL_TIM_Base_Start_IT(&htim6);
-	iicsearch();
+	//iicsearch();
 	Mpu9250Init();
 	int i = 0;
-	//vl53lxxInit();
+	vl53lxxInit();
+	
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -127,7 +129,8 @@ int main(void)
 	HAL_Delay(1000);
   while (1)
   {					
-		if(i<1){yawcalibration(200);i++;}
+		if(i>200&i<400){calibration();i=500;}
+		else i++;
 		HAL_Delay(5);
 		Angle_Update();
 		
@@ -179,7 +182,7 @@ void SystemClock_Config(void)
 /* USER CODE BEGIN 4 */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-    static unsigned char ledState = 0;
+//    static unsigned char ledState = 0;
     if (htim == (&htim6))
     {
 //      readMotion(&currentMotion);

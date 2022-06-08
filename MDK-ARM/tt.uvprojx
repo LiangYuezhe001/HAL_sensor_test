@@ -557,11 +557,6 @@
               <FileType>1</FileType>
               <FilePath>..\Drivers\mydriver\mpu9250.c</FilePath>
             </File>
-            <File>
-              <FileName>mpu9250.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Drivers\mydriver\mpu9250.h</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -586,6 +581,11 @@
               <FileName>maths.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\math\maths.c</FilePath>
+            </File>
+            <File>
+              <FileName>state_estimator.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\math\state_estimator.c</FilePath>
             </File>
           </Files>
         </Group>
