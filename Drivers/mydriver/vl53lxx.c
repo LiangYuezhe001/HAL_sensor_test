@@ -99,6 +99,37 @@ void vl53l1x(void)
 }
 
 
+u16 LaserGetHeight(void)
+{
+	int status;
+	u8 isDataReady = 0;
+	status = VL53L1_GetMeasurementDataReady(&dev, &isDataReady);
+static VL53L1_RangingMeasurementData_t rangingData;	
+			if(isDataReady)
+			{
+				status = VL53L1_GetRangingMeasurementData(&dev, &rangingData);
+				if(status==0)
+				{
+					range_last = rangingData.RangeMilliMeter * 0.1f;	/*µ¥Î»cm*/				
+				}
+				status = VL53L1_ClearInterruptAndStartMeasurement(&dev);
+			}	
+			
+			if(range_last < VL53L1X_MAX_RANGE)			
+				validCnt++;			
+			else 			
+				inValidCnt++;			
+			
+			if(inValidCnt + validCnt == 10)
+			{
+				quality += (validCnt/10.f - quality) * 0.1f;	/*µÍÍ¨*/
+				validCnt = 0;
+				inValidCnt = 0;
+			}
+			return range_last;
+}
+
+
 //bool vl53lxxReadRange(zRange_t* zrange)
 //{
 //	if(vl53lxxId == VL53L0X_ID) 

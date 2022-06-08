@@ -7,3 +7,4 @@ void Matrix_Solve(double* solve, double* acc_bias, double* acc_scal);
 void Matrix_RowSimplify(void);
 double Abs(double a);
 float ABs(float a);
+void GetItDone(double* acc_bias, double* acc_scal);

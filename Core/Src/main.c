@@ -35,6 +35,7 @@
 #include "Kalman_Filter.h"
 #include "ak8963.h"
 #include "vl53lxx.h"
+#include "Ellipse_Fitting.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -44,7 +45,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define ellipse_fitting 0 
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -117,21 +118,19 @@ int main(void)
 	//HAL_TIM_Base_Start_IT(&htim6);
 	iicsearch();
 	Mpu9250Init();
-	u8 i = 0;
-	u8 f=0x76;
+	int i = 0;
 	//vl53lxxInit();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+	HAL_Delay(1000);
   while (1)
   {					
-		//i2cdevReadByte(0, f, i+0xf7, &buff[i]);
-		delay_us(500);
+		if(i<1){yawcalibration(200);i++;}
+		HAL_Delay(5);
+		Angle_Update();
 		
-		//i2cdevRead(0, MPU_ADDR, MPU6500_RA_ACCEL_XOUT_H, 29, buff);
-		Output();
-		//getandsend();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

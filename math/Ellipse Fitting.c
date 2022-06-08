@@ -1,5 +1,4 @@
 
-//#include "stdafx.h"
 #include "stdio.h"
 #include "string.h"
 #include "math.h"
@@ -168,39 +167,19 @@ void Matrix_Solve(double* solve, double* acc_bias, double* acc_scal)
 		acc_scal[2] = acc_scal[0] / sqrt(solve[1]);
 }
 
-//?????????
-//void Ellipsoid_fitting_Process(void)
-//{
-//	
-//	CalcData_Input_average();
-//	DispMatrix();
-//	if (Matrix_GaussElimination())
-//		printf("the marix could not be solved\r\n");
-//	else
-//	{
-//		Matrix_RowSimplify();
-//		Matrix_Solve(solve);
-
-//		double a = 0, b = 0, c = 0, d = 0, e = 0, f = 0;
-//		a = solve[0];
-//		b = solve[1];
-//		c = solve[2];
-//		d = solve[3];
-//		e = solve[4];
-//		f = solve[5];
-
-//		double X0 = 0, Y0 = 0, Z0 = 0, A = 0, B = 0, C = 0;
-//		X0 = -c / 2;
-//		Y0 = -d / (2 * a);
-//		Z0 = -e / (2 * b);
-//		A = sqrt(X0*X0 + a*Y0*Y0 + b*Z0*Z0 - f);
-//		B = A / sqrt(a);
-//		C = A / sqrt(b);
-////		printf("  ((x - x0) / A) ^ 2 + ((y - y0) / B) ^ 2 + ((z - z0) / C) ^ 2 = 1 Ellipsoid result as below:\r\n");
-////		printf("\r\n");
-////		printf("  X0 = %f| Y0 = %f| Z0 = %f| A = %f| B = %f| C = %f \r\n", X0, Y0, Z0, A, B, C);
-//	}
-//	
-//}
+void GetItDone(double* acc_bias, double* acc_scal)
+{
+			double solve[6];
+//		Get_Acc(acc);
+//		CalcData_Input((double)acc[0], (double)acc[1], (double)acc[2]);
+//		i++;
+//		if(i>1000)
+//		{GetItDone(acc_bias, acc_scal);
+//			break;}
+	CalcData_Input_average();
+	Matrix_GaussElimination();
+	Matrix_RowSimplify();
+  Matrix_Solve(solve,acc_bias,acc_scal);
+}
 
 

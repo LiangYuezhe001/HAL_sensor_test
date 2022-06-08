@@ -257,3 +257,4 @@ u8 opticalFlowInit(void)
     HAL_Delay(1);
     return 1;
 }
+

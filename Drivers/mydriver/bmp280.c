@@ -165,7 +165,7 @@ void bmp280GetData(float* pressure, float* temperature, float* asl)
 
 	pressureFilter(&p,pressure);
 	*temperature = (float)t;/*单位度*/
-//	*pressure = (float)p ;	/*单位hPa*/	
+	//*pressure = (float)p ;	/*单位hPa*/	
 	
 	*asl=bmp280PressureToAltitude(pressure);	/*转换成海拔*/	
 }
@@ -184,3 +184,4 @@ float bmp280PressureToAltitude(float* pressure/*, float* groundPressure, float* 
         return 0;
     }
 }
+
