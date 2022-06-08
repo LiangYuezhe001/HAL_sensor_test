@@ -114,7 +114,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
 	
 	//HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
-	//opticalFlowInit();
+	opticalFlowInit();
 	//MPU_Init();
 	//HAL_TIM_Base_Start_IT(&htim6);
 	//iicsearch();
