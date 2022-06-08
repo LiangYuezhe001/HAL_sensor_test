@@ -6,6 +6,8 @@
 #include "vl53lxx.h"
 
 #define RESOLUTION			(0.2131946f)/*1m??? 1????????,??cm*/
+#define DEG2RAD		0.017453293f	/* ??????? ??/180 */
+#define RAD2DEG		57.29578f		/* ??????? 180/?? */
 
 extern float Compound_G,DeltaYaw,R_Yaw,Pitch_Kalman,Roll_Kalman,Yaw_Kalman,yaw_bias;
 float acc[3],Body_Bias_Pitch,Body_Bias_Roll,opitch,oroll;
@@ -16,15 +18,8 @@ void get_height(void)
 	u16 laser_range= LaserGetHeight();
 	if(laser_range!=600)
 		{
-//			Pitch_Kalman=0.95*opitch+0.05*Pitch_Kalman;
-//			opitch=Pitch_Kalman;
-//			Roll_Kalman=0.95*oroll+0.05*Roll_Kalman;
-//			oroll=Roll_Kalman;
-//			Pitch_Kalman=((int)10*Pitch_Kalman)/10;
-//			Roll_Kalman=((int)10*Roll_Kalman)/10;
-	height=(float)(laser_range*cosf(Abs(Pitch_Kalman-Body_Bias_Pitch)/180*3.14f)*cosf(Abs(Roll_Kalman-Body_Bias_Roll)/180*3.14f));
-			//height=(float)laser_range;
-			
+	height=(float)(laser_range*cosf(Abs(Pitch_Kalman-Body_Bias_Pitch)*DEG2RAD)*cosf(Abs(Roll_Kalman-Body_Bias_Roll)*DEG2RAD));
+	
 	}
 	
 }
