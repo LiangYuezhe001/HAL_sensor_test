@@ -113,7 +113,8 @@ int main(void)
   MX_TIM7_Init();
   /* USER CODE BEGIN 2 */
 	
-	//HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
+	//printf("AT+BAUD4");
 	opticalFlowInit();
 	//MPU_Init();
 	//HAL_TIM_Base_Start_IT(&htim6);
@@ -129,11 +130,11 @@ int main(void)
 	HAL_Delay(1000);
   while (1)
   {					
-		if(i>200&i<400){calibration();i=500;}
+		if(i>100&i<200){calibration();i=500;}
 		else i++;
 		HAL_Delay(5);
-		Angle_Update();
-		
+		//Angle_Update();
+		getOpFlowData();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

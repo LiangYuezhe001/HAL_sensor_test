@@ -1,13 +1,14 @@
 % 释放串口资源
 delete(instrfindall);
 % 创建串口资源
-s = serialport("COM8",9600);
+s = serialport("COM10",9600);
 configureTerminator(s,"CR/LF");
 flush(s);
 s.UserData = struct("x",[],"y",[],"z",[],"Count",1,"i",[]);
 
 configureCallback(s,"terminator",@readSineWaveData);
 %delete(s);
+%pause(5); 
 function readSineWaveData(s,~)
 data = readline(s)
 tem = str2double(data);
@@ -27,7 +28,7 @@ switch(s.UserData.i)
 end
 s.UserData.i=s.UserData.i+1;
 
-if s.UserData.Count > 50
+if s.UserData.Count > 200
     configureCallback(s, "off");   
     %mesh(s.UserData.x,s.UserData.y,s.UserData.z)
    % plot(s.UserData.Data(2:end));

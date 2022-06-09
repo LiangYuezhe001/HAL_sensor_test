@@ -54,12 +54,12 @@ void Mpu9250Init(void)
         i2cdevWriteBit(0, MPU_ADDR, MPU6500_RA_INT_PIN_CFG, 1, 1);//set 6500 bypass mode
 				HAL_Delay(1);
         // allow iic to r/w other divice
-        printf("6500 I2C connection [OK].\n");
+        printf("6500 I2C connection [OK].\r\n");
 			 iicsearch();
     }
     else
     {
-        printf("6500 I2C connection [FAIL].\n");
+        printf("6500 I2C connection [FAIL].\r\n");
     }
 
    // MPU_Init(); //6500 basic init 
@@ -67,21 +67,21 @@ void Mpu9250Init(void)
     if (ak8963TestConnection() == true)
     {
         ak8963SetMode(AK8963_MODE_16BIT | AK8963_MODE_CONT2); // 16bit 100Hz
-        printf("AK8963 I2C connection [OK].\n");
+        printf("AK8963 I2C connection [OK].\r\n");
     }
     else
     {
-        printf("AK8963 I2C connection [FAIL].\n");
+        printf("AK8963 I2C connection [FAIL].\r\n");
     }
 
     if (bmp280Init() == true)
     {
 
-        printf("AK8963 I2C connection [OK].\n");
+        printf("AK8963 I2C connection [OK].\r\n");
     }
     else
     {
-        printf("AK8963 I2C connection [FAIL].\n");
+        printf("AK8963 I2C connection [FAIL].\r\n");
     }
    // void sensorsSetupSlaveRead(void);
 

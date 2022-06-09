@@ -6,6 +6,11 @@
 #include "sys.h"
 #include "tim.h"
 #include "ANO_DT.h"
+#include "main.h"
+#include "mpu6050.h"
+#include "ak8963.h"
+#include "bmp280.h"
+#include "mpu9250.h"
 #define NCS_PIN PAout(3)
 
 u8 getandsend(void)
@@ -57,6 +62,21 @@ u8 getandsend(void)
     }
     return 1;
 }
+
+u8 GetOpFlow(int16_t* dx,int16_t* dy)
+{
+	motionBurst_t currentMotion;
+	readMotion(&currentMotion);
+	
+    *dx=currentMotion.deltaX;
+    *dy=currentMotion.deltaY;
+	 if(*dx>=100||*dx<=-100)*dx=00;
+    
+    if(*dy>=100||*dy<=-100)*dy=00;
+    
+	return 0;
+}
+
 
 void registerWrite(uint8_t reg, uint8_t value)
 {
@@ -245,6 +265,7 @@ u8 opticalFlowInit(void)
     invChipId = registerRead(0x5f);
     if (chipId != 0x49 || invChipId != 0xB6)
         return 0;
+		printf("3901ready\r\n");
     registerWrite(0x3a, 0x5a);
     HAL_Delay(50);
     registerRead(0x2);
