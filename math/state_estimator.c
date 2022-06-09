@@ -4,7 +4,7 @@
 #include "mpu6050.h"
 #include "bmp280.h"
 #include "vl53lxx.h"
-
+#include "send2matlab.h"
 #define RESOLUTION			(0.2131946f)/*1m??? 1????????,??cm*/
 #define DEG2RAD		0.017453293f	/* ??????? ??/180 */
 #define RAD2DEG		57.29578f		/* ??????? 180/?? */
@@ -44,7 +44,7 @@ void body_calibration(void)
 }
 
 void Angle_Update(void)
-{	static int i;
+{	static int i,j,k=1;
   float gyro[3],pressure,temperature,asl;
 	
 	Get_Gyro(gyro);
@@ -75,7 +75,13 @@ void Angle_Update(void)
 	}
 	
 	get_height();
-ANO_DT_Send_Status(Roll_Kalman, Pitch_Kalman, height, 0, 0, 0);
+//ANO_DT_Send_Status(Roll_Kalman, Pitch_Kalman, height, 0, 0, 0);
+	j++;
+	if(j>50){j=0;k++;}
+	if(k>10)k=1;
+	 Send_Status((double)j*k, (double)j+k, (double)j/k);
+	
+	
 }
 
 

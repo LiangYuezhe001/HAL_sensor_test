@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F103xE</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include;..\Drivers\mydriver;..\math;..\Drivers\VL53L1X;..\Drivers\VL53L1X\vl53l1_platform;..\Drivers\mydriver\laser</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include;..\Drivers\mydriver;..\math;..\Drivers\VL53L1X;..\Drivers\VL53L1X\vl53l1_platform;..\Drivers\mydriver\laser;..\Drivers\mydriver\matlab</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -676,6 +676,21 @@
               <FileName>vl53l1_wait.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Drivers\VL53L1X\vl53l1_wait.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>matlab</GroupName>
+          <Files>
+            <File>
+              <FileName>Send2Matlab.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\mydriver\matlab\Send2Matlab.c</FilePath>
+            </File>
+            <File>
+              <FileName>send2matlab.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Drivers\mydriver\matlab\send2matlab.h</FilePath>
             </File>
           </Files>
         </Group>
