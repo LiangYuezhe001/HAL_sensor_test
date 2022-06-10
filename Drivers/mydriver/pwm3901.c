@@ -63,15 +63,14 @@ u8 getandsend(void)
     return 1;
 }
 
-u8 GetOpFlow(int16_t* dx,int16_t* dy)
+u8 GetOpFlow(int16_t* dx,int16_t* dy,u8* squal)
 {
 	motionBurst_t currentMotion;
 	readMotion(&currentMotion);
-	
+	*squal=currentMotion.squal;
     *dx=currentMotion.deltaX;
     *dy=currentMotion.deltaY;
 	 if(*dx>=100||*dx<=-100)*dx=00;
-    
     if(*dy>=100||*dy<=-100)*dy=00;
     
 	return 0;

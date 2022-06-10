@@ -76,7 +76,7 @@ int fputc(int ch,FILE * fp)
  HAL_UART_Transmit(&huart1,(uint8_t * )&ch,1,0xffff);
  return ch;
 }
-
+int run_flag=0;
 /* USER CODE END 0 */
 
 /**
@@ -109,10 +109,12 @@ int main(void)
   MX_GPIO_Init();
   MX_SPI1_Init();
   MX_TIM6_Init();
+	HAL_TIM_Base_Start_IT(&htim6);
   MX_USART1_UART_Init();
   MX_TIM7_Init();
   /* USER CODE BEGIN 2 */
 	
+	int i = 0;
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
 	//printf("AT+BAUD4");
 	opticalFlowInit();
@@ -120,21 +122,20 @@ int main(void)
 	//HAL_TIM_Base_Start_IT(&htim6);
 	//iicsearch();
 	Mpu9250Init();
-	int i = 0;
 	vl53lxxInit();
 	
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-	HAL_Delay(1000);
+	
   while (1)
   {					
-		if(i>100&i<200){calibration();i=500;}
+		if(i>100&i<200){calibration();run_flag=1;;i=500;}
 		else i++;
-		HAL_Delay(5);
+		//HAL_Delay(5);
 		//Angle_Update();
-		getOpFlowData();
+		//getOpFlowData();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -186,7 +187,11 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 //    static unsigned char ledState = 0;
     if (htim == (&htim6))
     {
-//      readMotion(&currentMotion);
+			if(run_flag){
+			getOpFlowData();
+				//printf("fu");
+			}
+				//      readMotion(&currentMotion);
 //			printf("%d",currentMotion.deltaX);
     }
 }

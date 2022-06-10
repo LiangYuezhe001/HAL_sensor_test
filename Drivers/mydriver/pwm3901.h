@@ -37,5 +37,5 @@ void registerWrite(uint8_t reg, uint8_t value);
 void readMotion(motionBurst_t *motion);
 static uint8_t registerRead(uint8_t reg);
 static void InitRegisters(void);
-u8 GetOpFlow(int16_t* dx,int16_t* dy);
+u8 GetOpFlow(int16_t* dx,int16_t* dy,u8* squal);
 u8 opticalFlowInit(void);
