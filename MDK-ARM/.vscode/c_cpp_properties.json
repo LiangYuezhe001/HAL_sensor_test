@@ -3,17 +3,22 @@
         {
             "name": "tt",
             "includePath": [
-                "c:\\Users\\liangyuezhe\\Desktop\\tt\\tt\\Core\\Inc",
-                "c:\\Users\\liangyuezhe\\Desktop\\tt\\tt\\Drivers\\STM32F1xx_HAL_Driver\\Inc",
-                "c:\\Users\\liangyuezhe\\Desktop\\tt\\tt\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\Legacy",
-                "c:\\Users\\liangyuezhe\\Desktop\\tt\\tt\\Drivers\\CMSIS\\Device\\ST\\STM32F1xx\\Include",
-                "c:\\Users\\liangyuezhe\\Desktop\\tt\\tt\\Drivers\\CMSIS\\Include",
-                "c:\\Users\\liangyuezhe\\Desktop\\tt\\tt\\Drivers\\mydriver",
+                "c:\\Users\\liangyuezhe\\Documents\\GitHub\\HAL_sensor_test\\Core\\Inc",
+                "c:\\Users\\liangyuezhe\\Documents\\GitHub\\HAL_sensor_test\\Drivers\\STM32F1xx_HAL_Driver\\Inc",
+                "c:\\Users\\liangyuezhe\\Documents\\GitHub\\HAL_sensor_test\\Drivers\\STM32F1xx_HAL_Driver\\Inc\\Legacy",
+                "c:\\Users\\liangyuezhe\\Documents\\GitHub\\HAL_sensor_test\\Drivers\\CMSIS\\Device\\ST\\STM32F1xx\\Include",
+                "c:\\Users\\liangyuezhe\\Documents\\GitHub\\HAL_sensor_test\\Drivers\\CMSIS\\Include",
+                "c:\\Users\\liangyuezhe\\Documents\\GitHub\\HAL_sensor_test\\Drivers\\mydriver",
+                "c:\\Users\\liangyuezhe\\Documents\\GitHub\\HAL_sensor_test\\math",
+                "c:\\Users\\liangyuezhe\\Documents\\GitHub\\HAL_sensor_test\\Drivers\\VL53L1X",
+                "c:\\Users\\liangyuezhe\\Documents\\GitHub\\HAL_sensor_test\\Drivers\\VL53L1X\\vl53l1_platform",
+                "c:\\Users\\liangyuezhe\\Documents\\GitHub\\HAL_sensor_test\\Drivers\\mydriver\\laser",
+                "c:\\Users\\liangyuezhe\\Documents\\GitHub\\HAL_sensor_test\\Drivers\\mydriver\\matlab",
                 "C:\\Keil_v5\\ARM\\ARMCC\\include",
                 "C:\\Keil_v5\\ARM\\ARMCC\\include\\rw",
-                "c:\\Users\\liangyuezhe\\Desktop\\tt\\tt\\MDK-ARM",
-                "c:\\Users\\liangyuezhe\\Desktop\\tt\\tt\\Core\\Src",
-                "c:\\Users\\liangyuezhe\\Desktop\\tt\\tt\\Drivers\\STM32F1xx_HAL_Driver\\Src"
+                "c:\\Users\\liangyuezhe\\Documents\\GitHub\\HAL_sensor_test\\MDK-ARM",
+                "c:\\Users\\liangyuezhe\\Documents\\GitHub\\HAL_sensor_test\\Core\\Src",
+                "c:\\Users\\liangyuezhe\\Documents\\GitHub\\HAL_sensor_test\\Drivers\\STM32F1xx_HAL_Driver\\Src"
             ],
             "defines": [
                 "USE_HAL_DRIVER",

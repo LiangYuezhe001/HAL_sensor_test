@@ -30,6 +30,13 @@
 #include <stdio.h>
 #include "ANO_DT.h"
 #include "tim.h"
+#include "mpu6050.h"
+#include "mpu9250.h"
+#include "Kalman_Filter.h"
+#include "ak8963.h"
+#include "vl53lxx.h"
+#include "Ellipse_Fitting.h"
+#include "state_estimator.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -39,7 +46,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define ellipse_fitting 0 
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -51,6 +58,7 @@
 
 /* USER CODE BEGIN PV */
 motionBurst_t currentMotion;
+u8 buff[30];
 //int sumx=0;
 /* USER CODE END PV */
 
@@ -68,7 +76,8 @@ int fputc(int ch,FILE * fp)
  HAL_UART_Transmit(&huart1,(uint8_t * )&ch,1,0xffff);
  return ch;
 }
-
+int run_flag=0;
+int i = 0;
 /* USER CODE END 0 */
 
 /**
@@ -101,21 +110,32 @@ int main(void)
   MX_GPIO_Init();
   MX_SPI1_Init();
   MX_TIM6_Init();
+	HAL_TIM_Base_Start_IT(&htim6);
   MX_USART1_UART_Init();
   MX_TIM7_Init();
   /* USER CODE BEGIN 2 */
+	
+	
 	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
+	//printf("AT+BAUD4");
 	opticalFlowInit();
+	//MPU_Init();
 	//HAL_TIM_Base_Start_IT(&htim6);
+	//iicsearch();
+	Mpu9250Init();
+	vl53lxxInit();
+	
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+	
   while (1)
   {					
-		MPU_Init(void)
-		HAL_Delay(10);
-					//getandsend();
+		
+		//HAL_Delay(5);
+		//Angle_Update();
+		//getOpFlowData();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -164,10 +184,21 @@ void SystemClock_Config(void)
 /* USER CODE BEGIN 4 */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-    static unsigned char ledState = 0;
+//    static unsigned char ledState = 0;
     if (htim == (&htim6))
     {
-//      readMotion(&currentMotion);
+			if(run_flag){
+			getOpFlowData();
+				//printf("fu");
+			}
+			if(i>100&i<200)
+{
+	run_flag=0;
+calibration();
+run_flag=1;
+i=500;}
+		else i++;
+				//      readMotion(&currentMotion);
 //			printf("%d",currentMotion.deltaX);
     }
 }

@@ -1,3 +1,4 @@
+
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
@@ -123,7 +124,7 @@ int main(void)
 	//iicsearch();
 	Mpu9250Init();
 	vl53lxxInit();
-	
+	run_flag=1;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -131,7 +132,7 @@ int main(void)
 	
   while (1)
   {					
-		if(i>100&i<200){calibration();run_flag=1;;i=500;}
+		if(i>100&i<200){run_flag=0;calibration();run_flag=1;i=500;}
 		else i++;
 		//HAL_Delay(5);
 		//Angle_Update();
@@ -189,10 +190,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     {
 			if(run_flag){
 			getOpFlowData();
-				//printf("fu");
+				
 			}
-				//      readMotion(&currentMotion);
-//			printf("%d",currentMotion.deltaX);
+				
     }
 }
 /* USER CODE END 4 */

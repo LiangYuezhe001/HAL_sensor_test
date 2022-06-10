@@ -40,6 +40,7 @@ void KalmanCalculation(float*gyro ,float* acc_real)
     // 参数说明：A=1，B=dt，控制量=角速度，观测值直接测得角度H=1，
     Pitch_tan=acc_real[1]/(sqrt(acc_real[0]*acc_real[0]+acc_real[2]*acc_real[2]));
     Roll_tan=acc_real[0]/(sqrt(acc_real[1]*acc_real[1]+acc_real[2]*acc_real[2]));
+	
     Pitch_z = (atan(Pitch_tan)) * 180 / 3.1415;
     Roll_z =-(atan(Roll_tan)) * 180 / 3.1415;
     Yaw_z += (gyro[2]-yaw_bias)*yaw_dt;
