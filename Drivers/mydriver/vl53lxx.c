@@ -91,7 +91,7 @@ u16 LaserGetHeight(void)
 	int status;
 	u8 isDataReady = 0;
 	status = VL53L1_GetMeasurementDataReady(&dev, &isDataReady);
-static VL53L1_RangingMeasurementData_t rangingData;	
+	static VL53L1_RangingMeasurementData_t rangingData;	
 			if(isDataReady)
 			{
 				status = VL53L1_GetRangingMeasurementData(&dev, &rangingData);

@@ -94,7 +94,7 @@ void registerWrite(uint8_t reg, uint8_t value)
 void readMotion(motionBurst_t *motion)
 {   u8 add = 0x16;
     u8 buff[11];
-    u16 i;
+//    u16 i;
     NCS_PIN = 0; //Ê¹ÄÜÆ÷¼þ
     delay_us(5);
     HAL_SPI_Transmit(&hspi1, &add, 1, 1000);
