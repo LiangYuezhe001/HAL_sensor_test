@@ -118,9 +118,12 @@ int main(void)
   opticalFlowInit();
   Mpu9250Init();
   vl53lxxInit();
+	printf("sb");
+	printf("sb");
+	printf("sb");
+	printf("sb");
 	HAL_TIM_Base_Start_IT(&htim6);
   run_flag = 1;
-
 	
   /* USER CODE END 2 */
 

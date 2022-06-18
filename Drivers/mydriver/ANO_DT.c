@@ -73,7 +73,8 @@ void ANO_DT_Send_Version(u8 hardware_type, u16 hardware_ver,u16 software_ver,u16
 	data_to_send[_cnt++]=BYTE0(protocol_ver);
 	data_to_send[_cnt++]=BYTE1(bootloader_ver);
 	data_to_send[_cnt++]=BYTE0(bootloader_ver);
-	
+	//data_to_send[_cnt++]=0x10;
+	//data_to_send[_cnt++]=0x13;
 	data_to_send[3] = _cnt-4;
 	
 	u8 sum = 0;
