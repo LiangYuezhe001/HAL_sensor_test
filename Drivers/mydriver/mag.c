@@ -5,37 +5,23 @@
 #include <math.h>
 #include "tim.h"
 #include "mag.h"
-/**************************************************************************
-×÷  Õß £º´óÓãµç×Ó
-ÌÔ±¦µØÖ·£ºhttps://shop119207236.taobao.com
-**************************************************************************/
-//³õÊ¼»¯MAG6050
-//·µ»ØÖµ:0,³É¹¦
-//ÆäËû,´íÎó´úÂë
+
 u8 MAG_Init(void)
 {
-	u8 res;
-	//MAG_IIC_Init();							 //³õÊ¼»¯IIC×ÜÏß
-	MAG_Write_Byte(MAG_PWR_MGMT1_REG, 0X80); //¸´Î»MAG6050
-	delay_ms(100);
-	MAG_Write_Byte(MAG_PWR_MGMT1_REG, 0X00); //»½ĞÑMAG6050
-	MAG_Set_Gyro_Fsr(0);					 //ÍÓÂİÒÇ´«¸ĞÆ÷,¡À250dps
-	MAG_Set_Accel_Fsr(0);					 //¼ÓËÙ¶È´«¸ĞÆ÷,¡À2g
-	MAG_Set_Rate(200);						 //ÉèÖÃ²ÉÑùÂÊ50Hz
-	MAG_Write_Byte(MAG_INT_EN_REG, 0X00);	 //¹Ø±ÕËùÓĞÖĞ¶ÏÏ
-	MAG_Write_Byte(MAG_USER_CTRL_REG, 0X00); // I2CÖ÷Ä£Ê½¹Ø±Õ
-	MAG_Write_Byte(MAG_FIFO_EN_REG, 0X00);	 //¹Ø±ÕFIFO
-	MAG_Write_Byte(MAG_INTBP_CFG_REG, 0X80); // INTÒı½ÅµÍµçÆ½ÓĞĞ§
-	res = MAG_Read_Byte(MAG_DEVICE_ID_REG);
-	if (res == 0x70) //Æ÷¼şIDÕıÈ·
+	HSCDTD_CTRL3_t reg;
+	reg.SRST = 1;
+
+	///////reset mag sensor//////////////
+	MAG_Write_Byte(HSCDTD_REG_CTRL3, reg); //?? reg3
+	delay_ms(5);
+	reg = MAG_Read_Byte(HSCDTD_REG_CTRL3);
+	if (reg.SRST == 1)
 	{
-		MAG_Write_Byte(MAG_PWR_MGMT1_REG, 0X01); //ÉèÖÃCLKSEL,PLL XÖáÎª²Î¿¼
-		MAG_Write_Byte(MAG_PWR_MGMT2_REG, 0X00); //¼ÓËÙ¶ÈÓëÍÓÂİÒÇ¶¼¹¤×÷
-		MAG_Set_Rate(200);						 //ÉèÖÃ²ÉÑùÂÊÎª50Hz
-	}
-	else
+
 		return 1;
-	return 0;
+	}
+
+	
 }
 //ÉèÖÃMAG6050ÍÓÂİÒÇ´«¸ĞÆ÷ÂúÁ¿³Ì·¶Î§
 // fsr:0,¡À250dps;1,¡À500dps;2,¡À1000dps;3,¡À2000dps
@@ -120,7 +106,7 @@ u8 MAG_Get_Gyroscope(short *gx, short *gy, short *gz)
 	return res;
 	;
 }
-u8 Get_Gyro(float* gyro)
+u8 Get_Gyro(float *gyro)
 {
 	u8 buf[6], res;
 	short raw_gyro[3];
@@ -131,9 +117,9 @@ u8 Get_Gyro(float* gyro)
 		raw_gyro[1] = ((u16)buf[2] << 8) | buf[3];
 		raw_gyro[2] = ((u16)buf[4] << 8) | buf[5];
 	}
-	gyro[0]=(float)raw_gyro[0]/32767*250;
-	gyro[1]=(float)raw_gyro[1]/32767*250;
-	gyro[2]=(float)raw_gyro[2]/32767*250;
+	gyro[0] = (float)raw_gyro[0] / 32767 * 250;
+	gyro[1] = (float)raw_gyro[1] / 32767 * 250;
+	gyro[2] = (float)raw_gyro[2] / 32767 * 250;
 	return res;
 	;
 }
@@ -155,7 +141,7 @@ u8 MAG_Get_Accelerometer(short *ax, short *ay, short *az)
 	;
 }
 
-u8 Get_Acc(float* acc)
+u8 Get_Acc(float *acc)
 {
 	u8 buf[6], res;
 	short raw_acc[3];
@@ -166,9 +152,9 @@ u8 Get_Acc(float* acc)
 		raw_acc[1] = ((u16)buf[2] << 8) | buf[3];
 		raw_acc[2] = ((u16)buf[4] << 8) | buf[5];
 	}
-	acc[0]=(float)raw_acc[0]/32767*2;
-	acc[1]=(float)raw_acc[1]/32767*2;
-	acc[2]=(float)raw_acc[2]/32767*2;
+	acc[0] = (float)raw_acc[0] / 32767 * 2;
+	acc[1] = (float)raw_acc[1] / 32767 * 2;
+	acc[2] = (float)raw_acc[2] / 32767 * 2;
 	return res;
 	;
 }
@@ -280,5 +266,3 @@ u8 MAG_Read_Byte(u8 reg)
 	MAG_IIC_Stop();							//²úÉúÒ»¸öÍ£Ö¹Ìõ¼ş
 	return res;
 }
-
-
