@@ -59,6 +59,7 @@ static void ANO_DT_Send_Check(u8 head, u8 check_sum)
 void ANO_DT_Send_Version(u8 hardware_type, u16 hardware_ver,u16 software_ver,u16 protocol_ver,u16 bootloader_ver)
 {
 	u8 _cnt=0;
+	
 	data_to_send[_cnt++]=0xAA;
 	data_to_send[_cnt++]=0xAA;
 	data_to_send[_cnt++]=0x00;
@@ -90,6 +91,9 @@ void ANO_DT_Send_Status(float angle_rol, float angle_pit, float angle_yaw, s32 a
 	vs16 _temp;
 	vs32 _temp2 = alt;
 	
+//	data_to_send[_cnt++]=0xff;
+//	data_to_send[_cnt++]=0xff;
+//	data_to_send[_cnt++]=0x50;
 	data_to_send[_cnt++]=0xAA;
 	data_to_send[_cnt++]=0xAA;
 	data_to_send[_cnt++]=0x01;

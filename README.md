@@ -33,4 +33,8 @@ SD0/SA0->D10->PB10
 NCS->D8->PB8
 CSB->D6->PB6
 
+#laser
+SCL->D14->PB14
+SDA->D12->PB12
 
+#mag

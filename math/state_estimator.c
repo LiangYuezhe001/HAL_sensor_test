@@ -19,7 +19,7 @@ float pixSum_x, pixSum_y;
 float pixValidLast_x, pixValidLast_y;
 float cosPitch, cosRoll, cosYaw;
 float Compound_G, Basic_G;
-u8 laser_updated;
+u8 laser_updated,x;
 float acc_bias_x, acc_bias_y, acc_bias_z;
 float acc_scal_x, acc_scal_y, acc_scal_z;
 
@@ -60,7 +60,7 @@ float height_estimator(float laser_height, float acc_speed_z, float acc_z)
 		if(k>=1)k=1;
 
     /////////imu预积分//////////
-    imu_pre_int_small = acc_speed_z  + acc_z * 0.00125f;
+    imu_pre_int_small = acc_speed_z*dt  + acc_z * 0.00125f;
     imu_pre_int += imu_pre_int_small;
 
     ////////激光速度//////////////
@@ -72,6 +72,9 @@ float height_estimator(float laser_height, float acc_speed_z, float acc_z)
     if (i > 10 && i < 13)k = 1; ///维持50ms
     if (i > 30)i = 25;
     i++;
+		
+		if(x==1)x=0;
+		if(x==0)x=1;
 		
 		////激光滤波///////////
 		fil_laser_height=fil_laser_height+0.1f*(laser_height-fil_laser_height);
@@ -95,7 +98,7 @@ float height_estimator(float laser_height, float acc_speed_z, float acc_z)
 
     ////////z轴速度bias更新//////////////
 //		if(Abs(d_height_es)<0.1)
-    speed_vector_bias.Z = fil_acc_speed_z - d_height_es;
+    speed_vector_bias.Z = acc_speed_z - d_height_es;
 //		speed_vector_bias.Z = 0;
 		
     ANO_DT_Send_Status(imu_pre_int, d_laser_height, laser_updated, 0, 0, 0);
@@ -234,7 +237,7 @@ void pos_estimator()
     rotateV(&acc_vector, &body_angle);
     speed_vector.X += (acc_vector.X);
     speed_vector.Y += (acc_vector.Y);
-    speed_vector.Z += ((acc_vector.Z - earth_bias_vector.Z) * 980 - speed_vector_bias.Z)*dt;
+    speed_vector.Z += ((acc_vector.Z - earth_bias_vector.Z) * 980 - speed_vector_bias.Z);
     pos_vector.Y += (speed_vector.Z) * 0.05f + (acc_vector.Z - earth_bias_vector.Z) * 0.575f;
     height_es = height_estimator(laser_height, speed_vector.Z, (acc_vector.Z - earth_bias_vector.Z) * 980);
     getOpFlowData();
