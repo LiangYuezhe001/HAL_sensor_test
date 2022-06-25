@@ -58,7 +58,11 @@ typedef struct {
 
 } HSCDTD_CTRL1_t;
 
-
+typedef struct {
+    float mag_x;
+    float mag_y;
+    float mag_z;
+} hscdtd_mag_t;
 
 typedef struct {
     uint8_t DOS : 1;
@@ -92,15 +96,10 @@ typedef struct {
 
 
 u8 MAG_Init(void); 								//��ʼ��MAG6050
-u8 MAG_Write_Len(u8 addr,u8 reg,u8 len,u8 *buf);//IIC����д
-u8 MAG_Read_Len(u8 addr,u8 reg,u8 len,u8 *buf); //IIC������ 
-u8 MAG_Write_Byte(u8 reg,u8 data);				//IICдһ���ֽ�
-u8 MAG_Read_Byte(u8 reg);						//IIC��һ���ֽ�
-
-u8 MAG_Set_Gyro_Fsr(u8 fsr);
-u8 MAG_Set_Accel_Fsr(u8 fsr);
-u8 MAG_Set_LPF(u16 lpf);
-u8 MAG_Set_Rate(u16 rate);
-u8 MAG_Set_Fifo(u8 sens);
-u8 Get_Gyro(float* gyro);
-u8 Get_Acc(float* acc);
+u8 mag_set_fifo_enable(void);
+u8 mag_temperature_compensation();
+u8 mag_force_mode_read_data(hscdtd_mag_t *p_mag_data);
+u8 mag_data_ready();
+u8 mag_set_offset(float x_off, float y_off, float z_off);
+u8 mag_offset_calibration();
+u8 mag_read_data(hscdtd_mag_t *p_mag_data);

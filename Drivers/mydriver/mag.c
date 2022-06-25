@@ -136,21 +136,6 @@ u8 mag_set_output_data_rate(void)
 	return 1;
 }
 
-//
-//
-//初始化
-u8 MAG_Init(void)
-{
-	mag_soft_reset();
-	who_am_i();
-	mag_set_state(0);
-	mag_set_resolution();
-	mag_set_mode();
-	mag_self_test();
-	mag_set_output_data_rate();
-	return 1;
-}
-
 /**
  * @brief Set the fifo data storage method.
  *
@@ -223,11 +208,11 @@ u8 mag_set_fifo_enable()
 u8 mag_read_temp()
 {
 	u8 u8_reg;
-    // We can safely cast the uint8_t to a int8_t as the the value of the
-    // value is formatted as int8_t.
-	u8_reg=MAG_Read_Byte(HSCDTD_REG_TEMP);
-    // Ignore read register status.
-    return u8_reg;
+	// We can safely cast the uint8_t to a int8_t as the the value of the
+	// value is formatted as int8_t.
+	u8_reg = MAG_Read_Byte(HSCDTD_REG_TEMP);
+	// Ignore read register status.
+	return u8_reg;
 }
 
 u8 mag_offset_calibration()
@@ -291,4 +276,134 @@ u8 mag_temperature_compensation()
 	// Set old state back.
 	mag_set_state(0);
 	return status;
+}
+
+u8 mag_read_data(hscdtd_mag_t *p_mag_data)
+{
+	u8 status;
+	int8_t i;
+	uint8_t buf[6];
+	int16_t tmp;
+	float *mag_data;
+
+	mag_data = &p_mag_data->mag_x;
+
+	// Read all mag data registers in one go.
+	for (i = 0; i < 6; i++)
+	{
+		buf[i] = MAG_Read_Byte(HSCDTD_REG_XOUT_L + i);
+	}
+
+	for (i = 0; i < 3; i++)
+	{
+		// Each axis is formatted little endian, flip it and make it signed.
+		tmp = (int16_t)((uint16_t)((buf[2 * i + 1] << 8) | (buf[2 * i])));
+		mag_data[i] = tmp * 0.150f; // Assumes 15 bit value.
+	}
+
+	return 1;
+}
+
+u8 mag_force_mode_read_data(hscdtd_mag_t *p_mag_data)
+{
+	u8 status;
+	u8 u8_reg;
+	HSCDTD_STAT_t stat;
+	HSCDTD_CTRL3_t reg;
+	int8_t i;
+
+	// Read the status register to clear any status bits.
+	u8_reg = MAG_Read_Byte(HSCDTD_REG_STATUS);
+
+	// Start measurement
+	u8_reg = MAG_Read_Byte(HSCDTD_REG_CTRL3);
+	memcpy(&reg, &u8_reg, 1);
+	reg.FRC = 1;
+	memcpy(&u8_reg, &reg, 1);
+	MAG_Write_Byte(HSCDTD_REG_CTRL3, u8_reg);
+
+	// Wait until data is ready.
+	for (i = 0; i < 10; i++)
+	{
+		u8_reg = MAG_Read_Byte(HSCDTD_REG_CTRL3);
+		memcpy(&stat, &u8_reg, 1);
+		if (stat.DRDY == 1)
+			break;
+		delay_ms(1);
+	}
+
+	if (stat.DRDY != 1)
+		return 0;
+
+	// Use magneto read function to read the data into the pointer.
+	status = mag_read_data(p_mag_data);
+	return status;
+}
+
+u8 hscdtd_data_ready()
+{
+	u8 status;
+	HSCDTD_STAT_t stat;
+	u8 u8_reg;
+
+	u8_reg = MAG_Read_Byte(HSCDTD_REG_CTRL3);
+	memcpy(&stat, &u8_reg, 1);
+	return stat.DRDY;
+}
+
+u8 mag_set_offset(float x_off, float y_off, float z_off)
+{
+	uint16_t tmp_off;
+	uint8_t offset_map[6];
+	int8_t i;
+
+	// Use a variable to make it easier to support 14bit in the future.
+	float max_offset = 2457.6;
+
+	// The sensor substracts the offset from the sensor value.
+	// This doesn't really make sense from a user perspective. So the
+	// negative version of the user supplied offset is applied.
+	// Put those in a array to simplify conversion.
+	float offsets[] = {-x_off, -y_off, -z_off};
+
+	// Loop over the values.
+	for (i = 0; i < 3; i++)
+	{
+		// Check if the offset value is valid.
+		if (offsets[i] > max_offset || offsets[i] < -max_offset)
+		{
+			// If the value is larger than the max value the behavior is
+			// undefined. Best to avoid it.
+			return 0;
+		}
+		// Convert to uin16_t
+		tmp_off = (uint16_t)(offsets[i] / 0.15f);
+		// Write the values to the offset map
+		offset_map[2 * i] = (uint8_t)(tmp_off & 0xFF);
+		offset_map[2 * i + 1] = (uint8_t)((tmp_off >> 8) & 0xFF);
+	}
+
+	// Write the offset map to the sensor.
+	for (i = 0; i < 6; i++)
+	{
+		MAG_Write_Byte(HSCDTD_REG_OFFSET_X_L + i, offset_map[i]);
+	}
+	return 1;
+}
+
+//
+//
+//初始化
+u8 MAG_Init(void)
+{
+	mag_soft_reset();
+	who_am_i();
+	mag_set_state(0);
+	mag_set_resolution();
+	mag_set_mode();
+	mag_self_test();
+	mag_set_output_data_rate();
+	mag_set_fifo_enable();
+	mag_temperature_compensation();
+	return 1;
 }
