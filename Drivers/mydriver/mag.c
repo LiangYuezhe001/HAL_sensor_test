@@ -1,24 +1,21 @@
 #include "MAG_IIC.h"
 #include "sys.h"
-//#include "delay.h"
 #include "usart.h"
 #include <math.h>
 #include "tim.h"
 #include "mag.h"
 
-//初始化
-u8 MAG_Init(void)
+u8 mag_set_register_bit(u8 input_register, u8 *register_data, u8 *register_bit, u8 *bit_val)
 {
-	
 
-	// who am i
-	// set_state
-	// set_resolution
-	// set_mode
-	// self_test
-	return 0;
+	u8 u8_reg;
+	register_data = MAG_Read_Byte(input_register);
+	register_bit = bit_val;
+	MAG_Write_Byte(input_register, register_data);
+	return 1;
 }
-//soft reset
+
+// soft reset
 u8 mag_soft_reset(void)
 {
 	HSCDTD_CTRL3_t reg;
@@ -34,12 +31,13 @@ u8 mag_soft_reset(void)
 	if (reg.SRST == 1)
 	{
 		printf("reset fail");
-		return 1;
+		return 0;
 	}
-
-	
+	else
+		return 1;
 }
 // who am i
+//我是sei
 u8 who_am_i(void)
 {
 	HSCDTD_CTRL3_t reg;
@@ -51,267 +49,246 @@ u8 who_am_i(void)
 		return 1;
 }
 // set_state
-u8 mag_set_state(void)
+//
+u8 mag_set_state(u8 state)
 {
+	HSCDTD_CTRL1_t reg;
+	u8 u8_reg;
+	u8_reg = MAG_Read_Byte(HSCDTD_REG_CTRL1);
+	memcpy(&reg, &u8_reg, 1);
+	reg.FS = state;
+	/*
+	HSCDTD_STATE_NORMAL = 0b00,
+	HSCDTD_STATE_FORCE = 0b01,
+	*/
+	memcpy(&u8_reg, &reg, 1);
+	MAG_Write_Byte(HSCDTD_REG_CTRL1, u8_reg);
+	return 1;
+}
+// set_resolution
+//设置分辨率耶
+u8 mag_set_resolution(void)
+{
+	HSCDTD_CTRL4_t reg;
+	u8 u8_reg;
+	u8_reg = MAG_Read_Byte(HSCDTD_REG_CTRL4);
+	memcpy(&reg, &u8_reg, 1);
 
+	reg.RS = 1; // 15 bit
+	memcpy(&u8_reg, &reg, 1);
+	MAG_Write_Byte(HSCDTD_REG_CTRL4, u8_reg);
+	return 1;
+}
+// set_mode
+//
+u8 mag_set_mode(void)
+{
+	HSCDTD_CTRL1_t reg;
+	u8 u8_reg;
+	u8_reg = MAG_Read_Byte(HSCDTD_REG_CTRL1);
+	memcpy(&reg, &u8_reg, 1);
+	reg.PC = 1; // ACTIVE MODE
+	memcpy(&u8_reg, &reg, 1);
+	MAG_Write_Byte(HSCDTD_REG_CTRL1, u8_reg);
+	return 1;
+}
+// self_test
+//自测
+u8 mag_self_test(void)
+{
+	HSCDTD_CTRL3_t reg;
+	u8 u8_reg;
+	//重启
+	//
+	u8_reg = MAG_Read_Byte(HSCDTD_REG_CTRL3);
+	memcpy(&reg, &u8_reg, 1);
+	reg.STC = 1;
+	memcpy(&u8_reg, &reg, 1);
+	MAG_Write_Byte(HSCDTD_REG_CTRL3, u8_reg);
+	delay_ms(5);
+	//
+
+	u8_reg = MAG_Read_Byte(HSCDTD_REG_SELFTEST_RESP);
+	if (u8_reg != 0xAA)
+		return 0;
+
+	u8_reg = MAG_Read_Byte(HSCDTD_REG_SELFTEST_RESP);
+	if (u8_reg != 0x55)
+		return 0;
+
+	return 1;
+}
+u8 mag_set_output_data_rate(void)
+{
+	HSCDTD_CTRL1_t reg;
+	u8 u8_reg;
+	u8_reg = MAG_Read_Byte(HSCDTD_REG_CTRL1);
+	memcpy(&reg, &u8_reg, 1);
+	reg.ODR = 0b11;
+	/*
+	HSCDTD_ODR_0_5HZ = 0b00,
+	HSCDTD_ODR_10HZ = 0b01,
+	HSCDTD_ODR_20HZ = 0b10,
+	HSCDTD_ODR_100HZ = 0b11,
+	*/
+	memcpy(&u8_reg, &reg, 1);
+	MAG_Write_Byte(HSCDTD_REG_CTRL1, u8_reg);
+	return 1;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//设置MAG6050陀螺仪传感器满量程范围
-// fsr:0,±250dps;1,±500dps;2,±1000dps;3,±2000dps
-//返回值:0,设置成功
-//    其他,设置失败
-u8 MAG_Set_Gyro_Fsr(u8 fsr)
+//
+//
+//初始化
+u8 MAG_Init(void)
 {
-	return MAG_Write_Byte(MAG_GYRO_CFG_REG, fsr << 3); //设置陀螺仪满量程范围
-}
-//设置MAG6050加速度传感器满量程范围
-// fsr:0,±2g;1,±4g;2,±8g;3,±16g
-//返回值:0,设置成功
-//    其他,设置失败
-u8 MAG_Set_Accel_Fsr(u8 fsr)
-{
-	return MAG_Write_Byte(MAG_ACCEL_CFG_REG, fsr << 3); //设置加速度传感器满量程范围
-}
-//设置MAG6050的数字低通滤波器
-// lpf:数字低通滤波频率(Hz)
-//返回值:0,设置成功
-//    其他,设置失败
-u8 MAG_Set_LPF(u16 lpf)
-{
-	u8 data = 0;
-	if (lpf >= 188)
-		data = 1;
-	else if (lpf >= 98)
-		data = 2;
-	else if (lpf >= 42)
-		data = 3;
-	else if (lpf >= 20)
-		data = 4;
-	else if (lpf >= 10)
-		data = 5;
-	else
-		data = 6;
-	return MAG_Write_Byte(MAG_CFG_REG, data); //设置数字低通滤波器
-}
-//设置MAG6050的采样率(假定Fs=1KHz)
-// rate:4~1000(Hz)
-//返回值:0,设置成功
-//    其他,设置失败
-u8 MAG_Set_Rate(u16 rate)
-{
-	u8 data;
-	if (rate > 1000)
-		rate = 1000;
-	if (rate < 4)
-		rate = 4;
-	data = 1000 / rate - 1;
-	data = MAG_Write_Byte(MAG_SAMPLE_RATE_REG, data); //设置数字低通滤波器
-	return MAG_Set_LPF(rate / 2);					  //自动设置LPF为采样率的一半
+	mag_soft_reset();
+	who_am_i();
+	mag_set_state(0);
+	mag_set_resolution();
+	mag_set_mode();
+	mag_self_test();
+	mag_set_output_data_rate();
+	return 1;
 }
 
-//得到温度值
-//返回值:温度值(扩大了100倍)
-short MAG_Get_Temperature(void)
+/**
+ * @brief Set the fifo data storage method.
+ *
+ * Set the method for storing data in FIFO. There are 2
+ * valid modes:
+ *  - Direct (Default)
+ *  - Comparision.
+ *
+ * This functionality is only available if FIFO is enabled.
+ *
+ * If storage method is set to 'Comparision' refer to page 11
+ * of the datasheet for more information.
+ *
+ * @param p_dev Pointer to device struct.
+ * @param fco Storage method
+ * @return hscdtd_status.
+ */
+u8 mag_set_fifo_data_storage_method()
 {
-	u8 buf[2];
-	short raw;
-	float temp;
-	MAG_Read_Len(MAG_ADDR, MAG_TEMP_OUTH_REG, 2, buf);
-	raw = ((u16)buf[0] << 8) | buf[1];
-	temp = 36.53 + ((double)raw) / 340;
-	return temp * 100;
-	;
+	HSCDTD_CTRL2_t reg;
+	u8 u8_reg;
+	u8_reg = MAG_Read_Byte(HSCDTD_REG_CTRL2);
+	memcpy(&reg, &u8_reg, 1);
+
+	reg.FCO = 0;
+	/*
+	HSCDTD_FCO_DIRECT = 0b00,
+	HSCDTD_FCO_COMP = 0b01,
+	*/
+	memcpy(&u8_reg, &reg, 1);
+	MAG_Write_Byte(HSCDTD_REG_CTRL2, u8_reg);
+	return 1;
 }
-//得到陀螺仪值(原始值)
-// gx,gy,gz:陀螺仪x,y,z轴的原始读数(带符号)
-//返回值:0,成功
-//    其他,错误代码
-u8 MAG_Get_Gyroscope(short *gx, short *gy, short *gz)
+
+u8 mag_set_fifo_comparision_method()
 {
-	u8 buf[6], res;
-	res = MAG_Read_Len(MAG_ADDR, MAG_GYRO_XOUTH_REG, 6, buf);
-	if (res == 0)
+
+	HSCDTD_CTRL2_t reg;
+	u8 u8_reg;
+	u8_reg = MAG_Read_Byte(HSCDTD_REG_CTRL2);
+	memcpy(&reg, &u8_reg, 1);
+
+	reg.AOR = 0;
+	/*
+	HSCDTD_AOR_OR = 0b00, (Default)
+	HSCDTD_AOR_AND = 0b01,
+	*/
+	memcpy(&u8_reg, &reg, 1);
+	MAG_Write_Byte(HSCDTD_REG_CTRL2, u8_reg);
+	return 1;
+}
+
+u8 mag_set_fifo_enable()
+{
+
+	HSCDTD_CTRL2_t reg;
+	u8 u8_reg;
+	u8_reg = MAG_Read_Byte(HSCDTD_REG_CTRL2);
+	memcpy(&reg, &u8_reg, 1);
+
+	reg.FF = 0;
+	/*
+	HSCDTD_FF_DISABLE = 0b00,
+	HSCDTD_FF_ENABLE = 0b01,
+	*/
+	memcpy(&u8_reg, &reg, 1);
+	MAG_Write_Byte(HSCDTD_REG_CTRL2, u8_reg);
+	return 1;
+}
+u8 mag_read_temp()
+{
+	u8 u8_reg;
+    // We can safely cast the uint8_t to a int8_t as the the value of the
+    // value is formatted as int8_t.
+	u8_reg=MAG_Read_Byte(HSCDTD_REG_TEMP);
+    // Ignore read register status.
+    return u8_reg;
+}
+
+u8 mag_offset_calibration()
+{
+
+	HSCDTD_CTRL3_t reg;
+	u8 u8_reg;
+
+	// Set the state to the force state.
+	mag_set_state(1);
+
+	u8_reg = MAG_Read_Byte(HSCDTD_REG_CTRL3);
+	memcpy(&reg, &u8_reg, 1);
+
+	reg.OCL = 1;
+
+	memcpy(&u8_reg, &reg, 1);
+	MAG_Write_Byte(HSCDTD_REG_CTRL3, u8_reg);
+
+	mag_set_state(0);
+	return 1;
+}
+
+u8 mag_temperature_compensation()
+{
+	u8 status;
+	int8_t i;
+	HSCDTD_CTRL3_t reg;
+	u8 u8_reg;
+	HSCDTD_STAT_t stat;
+
+	// Set the state to the force state.
+	mag_set_state(1);
+	u8_reg = MAG_Read_Byte(HSCDTD_REG_CTRL3);
+	memcpy(&reg, &u8_reg, 1);
+	reg.TCS = 1;
+	memcpy(&u8_reg, &reg, 1);
+	MAG_Write_Byte(HSCDTD_REG_CTRL3, u8_reg);
+
+	status = 0;
+	// Attempt to check status for ~50ms (Duration does not really matter).
+	// If no temperature after that, something has gone wrong.
+	for (i = 0; i < 50; i++)
 	{
-		*gx = ((u16)buf[0] << 8) | buf[1];
-		*gy = ((u16)buf[2] << 8) | buf[3];
-		*gz = ((u16)buf[4] << 8) | buf[5];
-	}
-	return res;
-	;
-}
-u8 Get_Gyro(float *gyro)
-{
-	u8 buf[6], res;
-	short raw_gyro[3];
-	res = MAG_Read_Len(MAG_ADDR, MAG_GYRO_XOUTH_REG, 6, buf);
-	if (res == 0)
-	{
-		raw_gyro[0] = ((u16)buf[0] << 8) | buf[1];
-		raw_gyro[1] = ((u16)buf[2] << 8) | buf[3];
-		raw_gyro[2] = ((u16)buf[4] << 8) | buf[5];
-	}
-	gyro[0] = (float)raw_gyro[0] / 32767 * 250;
-	gyro[1] = (float)raw_gyro[1] / 32767 * 250;
-	gyro[2] = (float)raw_gyro[2] / 32767 * 250;
-	return res;
-	;
-}
-//得到加速度值(原始值)
-// gx,gy,gz:陀螺仪x,y,z轴的原始读数(带符号)
-//返回值:0,成功
-//    其他,错误代码
-u8 MAG_Get_Accelerometer(short *ax, short *ay, short *az)
-{
-	u8 buf[6], res;
-	res = MAG_Read_Len(MAG_ADDR, MAG_ACCEL_XOUTH_REG, 6, buf);
-	if (res == 0)
-	{
-		*ax = ((u16)buf[0] << 8) | buf[1];
-		*ay = ((u16)buf[2] << 8) | buf[3];
-		*az = ((u16)buf[4] << 8) | buf[5];
-	}
-	return res;
-	;
-}
+		delay_ms(1);
 
-u8 Get_Acc(float *acc)
-{
-	u8 buf[6], res;
-	short raw_acc[3];
-	res = MAG_Read_Len(MAG_ADDR, MAG_ACCEL_XOUTH_REG, 6, buf);
-	if (res == 0)
-	{
-		raw_acc[0] = ((u16)buf[0] << 8) | buf[1];
-		raw_acc[1] = ((u16)buf[2] << 8) | buf[3];
-		raw_acc[2] = ((u16)buf[4] << 8) | buf[5];
-	}
-	acc[0] = (float)raw_acc[0] / 32767 * 2;
-	acc[1] = (float)raw_acc[1] / 32767 * 2;
-	acc[2] = (float)raw_acc[2] / 32767 * 2;
-	return res;
-	;
-}
-
-// IIC连续写
-// addr:器件地址
-// reg:寄存器地址
-// len:写入长度
-// buf:数据区
-//返回值:0,正常
-//     其他,错误代码
-u8 MAG_Write_Len(u8 addr, u8 reg, u8 len, u8 *buf)
-{
-	u8 i;
-	MAG_IIC_Start();
-	MAG_IIC_Send_Byte((addr << 1) | 0); //发送器件地址+写命令
-	if (MAG_IIC_Wait_Ack())				//等待应答
-	{
-		MAG_IIC_Stop();
-		return 1;
-	}
-	MAG_IIC_Send_Byte(reg); //写寄存器地址
-	MAG_IIC_Wait_Ack();		//等待应答
-	for (i = 0; i < len; i++)
-	{
-		MAG_IIC_Send_Byte(buf[i]); //发送数据
-		if (MAG_IIC_Wait_Ack())	   //等待ACK
+		// Read status register to check if temp data is ready.
+		u8_reg = MAG_Read_Byte(HSCDTD_REG_CTRL3);
+		memcpy(&stat, &u8_reg, 1);
+		if (stat.TRDY == 1)
 		{
-			MAG_IIC_Stop();
-			return 1;
+			// The datasheet specifies that the bit is cleared after
+			// reading the TEMP register.
+			// We don't need the value here, so we don't need the return
+			// value.
+			mag_read_temp();
+			status = 1;
+			break;
 		}
 	}
-	MAG_IIC_Stop();
-	return 0;
-}
-// IIC连续读
-// addr:器件地址
-// reg:要读取的寄存器地址
-// len:要读取的长度
-// buf:读取到的数据存储区
-//返回值:0,正常
-//     其他,错误代码
-u8 MAG_Read_Len(u8 addr, u8 reg, u8 len, u8 *buf)
-{
-	MAG_IIC_Start();
-	MAG_IIC_Send_Byte((addr << 1) | 0); //发送器件地址+写命令
-	if (MAG_IIC_Wait_Ack())				//等待应答
-	{
-		MAG_IIC_Stop();
-		return 1;
-	}
-	MAG_IIC_Send_Byte(reg); //写寄存器地址
-	MAG_IIC_Wait_Ack();		//等待应答
-	MAG_IIC_Start();
-	MAG_IIC_Send_Byte((addr << 1) | 1); //发送器件地址+读命令
-	MAG_IIC_Wait_Ack();					//等待应答
-	while (len)
-	{
-		if (len == 1)
-			*buf = MAG_IIC_Read_Byte(0); //读数据,发送nACK
-		else
-			*buf = MAG_IIC_Read_Byte(1); //读数据,发送ACK
-		len--;
-		buf++;
-	}
-	MAG_IIC_Stop(); //产生一个停止条件
-	return 0;
-}
-// IIC写一个字节
-// reg:寄存器地址
-// data:数据
-//返回值:0,正常
-//     其他,错误代码
-u8 MAG_Write_Byte(u8 reg, u8 data)
-{
-	MAG_IIC_Start();
-	MAG_IIC_Send_Byte((MAG_ADDR << 1) | 0); //发送器件地址+写命令
-	if (MAG_IIC_Wait_Ack())					//等待应答
-	{
-		MAG_IIC_Stop();
-		return 1;
-	}
-	MAG_IIC_Send_Byte(reg);	 //写寄存器地址
-	MAG_IIC_Wait_Ack();		 //等待应答
-	MAG_IIC_Send_Byte(data); //发送数据
-	if (MAG_IIC_Wait_Ack())	 //等待ACK
-	{
-		MAG_IIC_Stop();
-		return 1;
-	}
-	MAG_IIC_Stop();
-	return 0;
-}
-// IIC读一个字节
-// reg:寄存器地址
-//返回值:读到的数据
-u8 MAG_Read_Byte(u8 reg)
-{
-	u8 res;
-	MAG_IIC_Start();
-	MAG_IIC_Send_Byte((MAG_ADDR << 1) | 0); //发送器件地址+写命令
-	MAG_IIC_Wait_Ack();						//等待应答
-	MAG_IIC_Send_Byte(reg);					//写寄存器地址
-	MAG_IIC_Wait_Ack();						//等待应答
-	MAG_IIC_Start();
-	MAG_IIC_Send_Byte((MAG_ADDR << 1) | 1); //发送器件地址+读命令
-	MAG_IIC_Wait_Ack();						//等待应答
-	res = MAG_IIC_Read_Byte(0);				//读取数据,发送nACK
-	MAG_IIC_Stop();							//产生一个停止条件
-	return res;
+	// Set old state back.
+	mag_set_state(0);
+	return status;
 }
