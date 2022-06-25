@@ -6,25 +6,72 @@
 #include "tim.h"
 #include "mag.h"
 
-
 //初始化
 u8 MAG_Init(void)
 {
+	
+
+	// who am i
+	// set_state
+	// set_resolution
+	// set_mode
+	// self_test
+	return 0;
+}
+//soft reset
+u8 mag_soft_reset(void)
+{
 	HSCDTD_CTRL3_t reg;
-	reg.SRST = 1;
+	u8 u8_reg;
 
 	///////reset mag sensor//////////////
-	MAG_Write_Byte(HSCDTD_REG_CTRL3, reg); //?? reg3
+	reg.SRST = 1;
+	memcpy(&u8_reg, &reg, 1);
+	MAG_Write_Byte(HSCDTD_REG_CTRL3, u8_reg); //重置
 	delay_ms(5);
-	reg = MAG_Read_Byte(HSCDTD_REG_CTRL3);
+	u8_reg = MAG_Read_Byte(HSCDTD_REG_CTRL3);
+	memcpy(&reg, &u8_reg, 1);
 	if (reg.SRST == 1)
 	{
-
+		printf("reset fail");
 		return 1;
 	}
 
 	
 }
+// who am i
+u8 who_am_i(void)
+{
+	HSCDTD_CTRL3_t reg;
+	u8 u8_reg;
+	u8_reg = MAG_Read_Byte(HSCDTD_REG_WIA);
+	if (u8_reg = 0x49)
+		return 0;
+	else
+		return 1;
+}
+// set_state
+u8 mag_set_state(void)
+{
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //设置MAG6050陀螺仪传感器满量程范围
 // fsr:0,±250dps;1,±500dps;2,±1000dps;3,±2000dps
 //返回值:0,设置成功
