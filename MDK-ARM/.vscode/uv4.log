@@ -1,0 +1,37 @@
+*** Using Compiler 'V5.06 update 6 (build 750)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
+Build target 'tt'
+compiling mag.c...
+..\Drivers\mydriver\mag.c(26): warning:  #223-D: function "memcpy" declared implicitly
+  	memcpy(&u8_reg, &reg, 1);
+..\Drivers\mydriver\mag.c(43): warning:  #177-D: variable "reg"  was declared but never referenced
+  	HSCDTD_CTRL3_t reg;
+..\Drivers\mydriver\mag.c(58): warning:  #223-D: function "memcpy" declared implicitly
+  	memcpy(&reg, &u8_reg, 1);
+..\Drivers\mydriver\mag.c(75): warning:  #223-D: function "memcpy" declared implicitly
+  	memcpy(&reg, &u8_reg, 1);
+..\Drivers\mydriver\mag.c(89): warning:  #223-D: function "memcpy" declared implicitly
+  	memcpy(&reg, &u8_reg, 1);
+..\Drivers\mydriver\mag.c(104): warning:  #223-D: function "memcpy" declared implicitly
+  	memcpy(&reg, &u8_reg, 1);
+..\Drivers\mydriver\mag.c(126): warning:  #223-D: function "memcpy" declared implicitly
+  	memcpy(&reg, &u8_reg, 1);
+..\Drivers\mydriver\mag.c(128): error:  #65: expected a ";"
+  	reg.ODR = 0b11;
+..\Drivers\mydriver\mag.c(162): warning:  #223-D: function "memcpy" declared implicitly
+  	memcpy(&reg, &u8_reg, 1);
+..\Drivers\mydriver\mag.c(180): warning:  #223-D: function "memcpy" declared implicitly
+  	memcpy(&reg, &u8_reg, 1);
+..\Drivers\mydriver\mag.c(198): warning:  #223-D: function "memcpy" declared implicitly
+  	memcpy(&reg, &u8_reg, 1);
+..\Drivers\mydriver\mag.c(229): warning:  #223-D: function "memcpy" declared implicitly
+  	memcpy(&reg, &u8_reg, 1);
+..\Drivers\mydriver\mag.c(251): warning:  #223-D: function "memcpy" declared implicitly
+  	memcpy(&reg, &u8_reg, 1);
+..\Drivers\mydriver\mag.c(321): warning:  #223-D: function "memcpy" declared implicitly
+  	memcpy(&reg, &u8_reg, 1);
+..\Drivers\mydriver\mag.c(351): warning:  #223-D: function "memcpy" declared implicitly
+  	memcpy(&stat, &u8_reg, 1);
+..\Drivers\mydriver\mag.c: 14 warnings, 1 error
+"tt\tt.axf" - 1 Error(s), 14 Warning(s).
+Target not created.
+Build Time Elapsed:  00:00:02

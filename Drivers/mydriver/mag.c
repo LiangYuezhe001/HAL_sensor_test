@@ -4,16 +4,17 @@
 #include <math.h>
 #include "tim.h"
 #include "mag.h"
+#include "string.h"
 
-u8 mag_set_register_bit(u8 input_register, u8 *register_data, u8 *register_bit, u8 *bit_val)
-{
+// u8 mag_set_register_bit(u8 input_register, u8 *register_data, u8 *register_bit, u8 *bit_val)
+//{
 
-	u8 u8_reg;
-	register_data = MAG_Read_Byte(input_register);
-	register_bit = bit_val;
-	MAG_Write_Byte(input_register, register_data);
-	return 1;
-}
+//	u8 u8_reg;
+//	register_data = MAG_Read_Byte(input_register);
+//	register_bit = bit_val;
+//	MAG_Write_Byte(input_register, register_data);
+//	return 1;
+//}
 
 // soft reset
 u8 mag_soft_reset(void)
@@ -30,7 +31,7 @@ u8 mag_soft_reset(void)
 	memcpy(&reg, &u8_reg, 1);
 	if (reg.SRST == 1)
 	{
-		printf("reset fail");
+		//	printf("reset fail");
 		return 0;
 	}
 	else
@@ -40,10 +41,10 @@ u8 mag_soft_reset(void)
 //Œ“ «sei
 u8 who_am_i(void)
 {
-	HSCDTD_CTRL3_t reg;
+//	HSCDTD_CTRL3_t reg;
 	u8 u8_reg;
 	u8_reg = MAG_Read_Byte(HSCDTD_REG_WIA);
-	if (u8_reg = 0x49)
+	if (u8_reg == 0x49)
 		return 0;
 	else
 		return 1;
@@ -124,7 +125,8 @@ u8 mag_set_output_data_rate(void)
 	u8 u8_reg;
 	u8_reg = MAG_Read_Byte(HSCDTD_REG_CTRL1);
 	memcpy(&reg, &u8_reg, 1);
-	reg.ODR = 0b11;
+
+	reg.ODR = 3;
 	/*
 	HSCDTD_ODR_0_5HZ = 0b00,
 	HSCDTD_ODR_10HZ = 0b01,
@@ -153,7 +155,7 @@ u8 mag_set_output_data_rate(void)
  * @param fco Storage method
  * @return hscdtd_status.
  */
-u8 mag_set_fifo_data_storage_method()
+u8 mag_set_fifo_data_storage_method(void)
 {
 	HSCDTD_CTRL2_t reg;
 	u8 u8_reg;
@@ -170,7 +172,7 @@ u8 mag_set_fifo_data_storage_method()
 	return 1;
 }
 
-u8 mag_set_fifo_comparision_method()
+u8 mag_set_fifo_comparision_method(void)
 {
 
 	HSCDTD_CTRL2_t reg;
@@ -188,7 +190,7 @@ u8 mag_set_fifo_comparision_method()
 	return 1;
 }
 
-u8 mag_set_fifo_enable()
+u8 mag_set_fifo_enable(void)
 {
 
 	HSCDTD_CTRL2_t reg;
@@ -205,7 +207,7 @@ u8 mag_set_fifo_enable()
 	MAG_Write_Byte(HSCDTD_REG_CTRL2, u8_reg);
 	return 1;
 }
-u8 mag_read_temp()
+u8 mag_read_temp(void)
 {
 	u8 u8_reg;
 	// We can safely cast the uint8_t to a int8_t as the the value of the
@@ -215,7 +217,7 @@ u8 mag_read_temp()
 	return u8_reg;
 }
 
-u8 mag_offset_calibration()
+u8 mag_offset_calibration(void)
 {
 
 	HSCDTD_CTRL3_t reg;
@@ -236,7 +238,7 @@ u8 mag_offset_calibration()
 	return 1;
 }
 
-u8 mag_temperature_compensation()
+u8 mag_temperature_compensation(void)
 {
 	u8 status;
 	int8_t i;
@@ -280,7 +282,7 @@ u8 mag_temperature_compensation()
 
 u8 mag_read_data(hscdtd_mag_t *p_mag_data)
 {
-	u8 status;
+	//	u8 status;
 	int8_t i;
 	uint8_t buf[6];
 	int16_t tmp;
@@ -340,9 +342,9 @@ u8 mag_force_mode_read_data(hscdtd_mag_t *p_mag_data)
 	return status;
 }
 
-u8 hscdtd_data_ready()
+u8 mag_data_ready()
 {
-	u8 status;
+	//	u8 status;
 	HSCDTD_STAT_t stat;
 	u8 u8_reg;
 

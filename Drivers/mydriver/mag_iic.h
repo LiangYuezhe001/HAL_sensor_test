@@ -18,3 +18,5 @@ u8 MAG_IIC_Read_Byte(unsigned char ack);//IIC读取一个字节
 u8 MAG_IIC_Wait_Ack(void); 				//IIC等待ACK信号
 void MAG_IIC_Ack(void);					//IIC发送ACK信号
 void MAG_IIC_NAck(void);				//IIC不发送ACK信号
+u8 MAG_Read_Byte(u8 reg);
+u8 MAG_Write_Byte(u8 reg, u8 data);

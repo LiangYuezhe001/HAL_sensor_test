@@ -1,6 +1,7 @@
 #include "mag_iic.h"
 #include "tim.h"
 
+#define MAG_ADDR 0x0c
 
 void MAG_IIC_Delay(void)
 {
@@ -112,6 +113,44 @@ u8 MAG_IIC_Read_Byte(unsigned char ack)
 	else
 		MAG_IIC_Ack(); //发送ACK
 	return receive;
+}
+u8 MAG_Write_Byte(u8 reg, u8 data)
+{
+	MAG_IIC_Start();
+	MAG_IIC_Send_Byte((MAG_ADDR << 1) | 0); //发送器件地址+写命令
+	if (MAG_IIC_Wait_Ack())					//等待应答
+	{
+		MAG_IIC_Stop();
+		return 1;
+	}
+	MAG_IIC_Send_Byte(reg);	 //写寄存器地址
+	MAG_IIC_Wait_Ack();		 //等待应答
+	MAG_IIC_Send_Byte(data); //发送数据
+	if (MAG_IIC_Wait_Ack())	 //等待ACK
+	{
+		MAG_IIC_Stop();
+		return 1;
+	}
+	MAG_IIC_Stop();
+	return 0;
+}
+// IIC读一个字节
+// reg:寄存器地址
+//返回值:读到的数据
+u8 MAG_Read_Byte(u8 reg)
+{
+	u8 res;
+	MAG_IIC_Start();
+	MAG_IIC_Send_Byte((MAG_ADDR << 1) | 0); //发送器件地址+写命令
+	MAG_IIC_Wait_Ack();						//等待应答
+	MAG_IIC_Send_Byte(reg);					//写寄存器地址
+	MAG_IIC_Wait_Ack();						//等待应答
+	MAG_IIC_Start();
+	MAG_IIC_Send_Byte((MAG_ADDR << 1) | 1); //发送器件地址+读命令
+	MAG_IIC_Wait_Ack();						//等待应答
+	res = MAG_IIC_Read_Byte(0);				//读取数据,发送nACK
+	MAG_IIC_Stop();							//产生一个停止条件
+	return res;
 }
 
 //u8 i2cdevReadByte(u8 dev, uint8_t devAddress, uint8_t memAddress, uint8_t *data)

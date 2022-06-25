@@ -1,7 +1,7 @@
 #include "main.h"
 
 
-#define HSCDTD_REG_SELFTEST_RESP        0x0C //�Լ�Ĵ��� 0x55
+#define HSCDTD_REG_SELFTEST_RESP        0x0C 
 #define HSCDTD_REG_MORE_INFO            0x0D
 #define HSCDTD_REG_MORE_INFO_ALPS       0x0E
 #define HSCDTD_REG_WIA                  0x0F
@@ -95,11 +95,11 @@ typedef struct {
 } HSCDTD_CTRL4_t;
 
 
-u8 MAG_Init(void); 								//��ʼ��MAG6050
+u8 MAG_Init(void); 								
 u8 mag_set_fifo_enable(void);
-u8 mag_temperature_compensation();
+u8 mag_temperature_compensation(void);
 u8 mag_force_mode_read_data(hscdtd_mag_t *p_mag_data);
-u8 mag_data_ready();
+u8 mag_data_ready(void);
 u8 mag_set_offset(float x_off, float y_off, float z_off);
-u8 mag_offset_calibration();
+u8 mag_offset_calibration(void);
 u8 mag_read_data(hscdtd_mag_t *p_mag_data);

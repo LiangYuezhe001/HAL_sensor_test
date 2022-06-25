@@ -37,6 +37,7 @@
 #include "vl53lxx.h"
 #include "Ellipse_Fitting.h"
 #include "state_estimator.h"
+#include "mag.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -118,10 +119,7 @@ int main(void)
   opticalFlowInit();
   Mpu9250Init();
   vl53lxxInit();
-	printf("sb");
-	printf("sb");
-	printf("sb");
-	printf("sb");
+	MAG_Init(); 	
 	HAL_TIM_Base_Start_IT(&htim6);
   run_flag = 1;
 	
