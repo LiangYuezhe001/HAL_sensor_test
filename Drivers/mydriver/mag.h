@@ -1,7 +1,7 @@
 #include "main.h"
 
 
-#define HSCDTD_REG_SELFTEST_RESP        0x0C //×Ô¼ì¼Ä´æÆ÷ 0x55
+#define HSCDTD_REG_SELFTEST_RESP        0x0C //ï¿½Ô¼ï¿½Ä´ï¿½ï¿½ï¿½ 0x55
 #define HSCDTD_REG_MORE_INFO            0x0D
 #define HSCDTD_REG_MORE_INFO_ALPS       0x0E
 #define HSCDTD_REG_WIA                  0x0F
@@ -41,6 +41,7 @@ typedef struct {
 } HSCDTD_STAT_t;
 
 
+
 typedef struct {
     uint8_t FP : 4;
     uint8_t reserved_0 : 4;
@@ -56,6 +57,7 @@ typedef struct {
     uint8_t PC : 1;
 
 } HSCDTD_CTRL1_t;
+
 
 
 typedef struct {
@@ -89,11 +91,11 @@ typedef struct {
 } HSCDTD_CTRL4_t;
 
 
-u8 MAG_Init(void); 								//³õÊ¼»¯MAG6050
-u8 MAG_Write_Len(u8 addr,u8 reg,u8 len,u8 *buf);//IICÁ¬ÐøÐ´
-u8 MAG_Read_Len(u8 addr,u8 reg,u8 len,u8 *buf); //IICÁ¬Ðø¶Á 
-u8 MAG_Write_Byte(u8 reg,u8 data);				//IICÐ´Ò»¸ö×Ö½Ú
-u8 MAG_Read_Byte(u8 reg);						//IIC¶ÁÒ»¸ö×Ö½Ú
+u8 MAG_Init(void); 								//ï¿½ï¿½Ê¼ï¿½ï¿½MAG6050
+u8 MAG_Write_Len(u8 addr,u8 reg,u8 len,u8 *buf);//IICï¿½ï¿½ï¿½ï¿½Ð´
+u8 MAG_Read_Len(u8 addr,u8 reg,u8 len,u8 *buf); //IICï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
+u8 MAG_Write_Byte(u8 reg,u8 data);				//IICÐ´Ò»ï¿½ï¿½ï¿½Ö½ï¿½
+u8 MAG_Read_Byte(u8 reg);						//IICï¿½ï¿½Ò»ï¿½ï¿½ï¿½Ö½ï¿½
 
 u8 MAG_Set_Gyro_Fsr(u8 fsr);
 u8 MAG_Set_Accel_Fsr(u8 fsr);
