@@ -6,6 +6,8 @@
 #include "tim.h"
 #include "mag.h"
 
+
+//≥ı ºªØ
 u8 MAG_Init(void)
 {
 	HSCDTD_CTRL3_t reg;
