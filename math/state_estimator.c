@@ -7,6 +7,7 @@
 #include "vl53lxx.h"
 #include "send2matlab.h"
 #include "pwm3901.h"
+#include "mag.h"
 #define RESOLUTION 0.2131946f /*1m??? 1????????,??cm*/
 #define DEG2RAD 0.017453293f  /* ??????? ??/180 */
 #define RAD2DEG 57.29578f     /* ??????? 180/?? */
@@ -22,7 +23,7 @@ float Compound_G, Basic_G;
 u8 laser_updated,x;
 float acc_bias_x, acc_bias_y, acc_bias_z;
 float acc_scal_x, acc_scal_y, acc_scal_z;
-
+hscdtd_mag_t mag_data,mag_bias,mag_scal;
 fp_angles_t body_angle;
 t_fp_vector_def acc_vector;
 t_fp_vector_def speed_vector;
@@ -31,7 +32,7 @@ t_fp_vector_def pos_vector_bias;
 t_fp_vector_def earth_bias_vector;
 t_fp_vector_def pos_vector;
 u8 squal;
-
+u8 data_counter;
 // 更新激光高度
 void get_height(void)
 {
@@ -46,6 +47,8 @@ void get_height(void)
         laser_updated = 0;
     }
 }
+
+
 
 //高度估计
 float height_estimator(float laser_height, float acc_speed_z, float acc_z)
@@ -101,7 +104,7 @@ float height_estimator(float laser_height, float acc_speed_z, float acc_z)
     speed_vector_bias.Z = acc_speed_z - d_height_es;
 //		speed_vector_bias.Z = 0;
 		
-    ANO_DT_Send_Status(imu_pre_int, d_laser_height, laser_updated, 0, 0, 0);
+   // ANO_DT_Send_Status(imu_pre_int, d_laser_height, laser_updated, 0, 0, 0);
     return laser_height_es;
 }
 
@@ -228,11 +231,30 @@ void getOpFlowData(void)
     }
 }
 
+u8 data_update()
+{		
+		Angle_Update();
+	if(data_counter==1||data_counter==3)
+	{
+		mag_read_data(&mag_data);
+		mag_data.X=(mag_data.X+mag_bias.X)/mag_scal.X;
+		mag_data.Y=(mag_data.Y+mag_bias.Y)/mag_scal.Y;
+		mag_data.Z=(mag_data.Z+mag_bias.Z)/mag_scal.Z;
+		Send_Status((double) mag_data.X, (double) mag_data.Y, (double) mag_data.Z);
+	}
+	if(data_counter==3)
+	{
+		get_height();
+	}
+		data_counter++;
+	if(data_counter>=4)data_counter=0;
+	return data_counter;
+}
+
 //位置估计
 void pos_estimator()
 {
-    Angle_Update();
-    get_height();
+		data_update();
 
     rotateV(&acc_vector, &body_angle);
     speed_vector.X += (acc_vector.X);
@@ -253,6 +275,12 @@ void calibration(void)
     pos_estimator();
     earth_bias_vector.Z = acc_vector.Z;
 		speed_vector_bias.Z=0;
+		mag_bias.X=1347.4f;
+		mag_bias.Y=1344.56f;
+		mag_bias.Z=1411.57f;
+		mag_scal.X=1.125f;
+		mag_scal.Y=1.02f;
+		mag_scal.Z=1.18f;
     acc_bias_x = -0.002;
     acc_bias_y = -0.011;
     acc_bias_z = -0.02;

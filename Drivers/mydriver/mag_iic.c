@@ -1,7 +1,7 @@
 #include "mag_iic.h"
 #include "tim.h"
 
-#define MAG_ADDR 0x0c
+#define MAG_ADDR 0x0f
 
 void MAG_IIC_Delay(void)
 {
@@ -280,5 +280,22 @@ u8 MAG_Read_Byte(u8 reg)
 //	return status;
 //}
 
-
+void mag_iicsearch(void)
+	{
+		u8 i,j=0,count,add[10]={0,0,0,0,0,0,0,0,0,0};
+for(i=0x00;i<0x7F;i++)
+	 {
+			MAG_IIC_Start();
+		 MAG_IIC_Send_Byte((i << 1) | 0);
+		
+		if(MAG_IIC_Wait_Ack()==0) 
+		{
+			add[j]=i;
+			j++;
+		}
+		MAG_IIC_Stop();
+		delay_ms(1);
+	 }
+	 
+ }
  

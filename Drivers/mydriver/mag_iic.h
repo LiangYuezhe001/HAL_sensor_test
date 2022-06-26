@@ -20,3 +20,4 @@ void MAG_IIC_Ack(void);					//IIC发送ACK信号
 void MAG_IIC_NAck(void);				//IIC不发送ACK信号
 u8 MAG_Read_Byte(u8 reg);
 u8 MAG_Write_Byte(u8 reg, u8 data);
+void mag_iicsearch(void);

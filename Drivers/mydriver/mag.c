@@ -1,4 +1,4 @@
-#include "MAG_IIC.h"
+#include "mag_iic.h"
 #include "sys.h"
 #include "usart.h"
 #include <math.h>
@@ -262,7 +262,7 @@ u8 mag_temperature_compensation(void)
 		delay_ms(1);
 
 		// Read status register to check if temp data is ready.
-		u8_reg = MAG_Read_Byte(HSCDTD_REG_CTRL3);
+		u8_reg = MAG_Read_Byte(HSCDTD_REG_STATUS);
 		memcpy(&stat, &u8_reg, 1);
 		if (stat.TRDY == 1)
 		{
@@ -288,7 +288,7 @@ u8 mag_read_data(hscdtd_mag_t *p_mag_data)
 	int16_t tmp;
 	float *mag_data;
 
-	mag_data = &p_mag_data->mag_x;
+	mag_data = &p_mag_data->X;
 
 	// Read all mag data registers in one go.
 	for (i = 0; i < 6; i++)
@@ -398,6 +398,7 @@ u8 mag_set_offset(float x_off, float y_off, float z_off)
 //³õÊ¼»¯
 u8 MAG_Init(void)
 {
+	mag_iicsearch();
 	mag_soft_reset();
 	who_am_i();
 	mag_set_state(0);
@@ -407,5 +408,7 @@ u8 MAG_Init(void)
 	mag_set_output_data_rate();
 	mag_set_fifo_enable();
 	mag_temperature_compensation();
+	//mag_offset_calibration();
+	//mag_set_offset(1342.18f,1338.06f,1409.77f);
 	return 1;
 }

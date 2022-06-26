@@ -1,7 +1,7 @@
 % 释放串口资源
 delete(instrfindall);
 % 创建串口资源
-s = serialport("COM8",115200);
+s = serialport("COM7",115200);
 configureTerminator(s,"CR/LF");
 flush(s);
 s.UserData = struct("x",[],"y",[],"z",[],"Count",1,"i",[]);
@@ -32,7 +32,7 @@ end
 s.UserData.i=s.UserData.i+1;
 
 
-if s.UserData.Count > 4000
+if s.UserData.Count > 2000
     configureCallback(s, "off");   
     %mesh(s.UserData.x,s.UserData.y,s.UserData.z)
    % plot(s.UserData.Data(2:end));

@@ -59,9 +59,9 @@ typedef struct {
 } HSCDTD_CTRL1_t;
 
 typedef struct {
-    float mag_x;
-    float mag_y;
-    float mag_z;
+    float X;
+    float Y;
+    float Z;
 } hscdtd_mag_t;
 
 typedef struct {
