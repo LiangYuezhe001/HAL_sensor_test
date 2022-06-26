@@ -33,6 +33,10 @@ t_fp_vector_def earth_bias_vector;
 t_fp_vector_def pos_vector;
 u8 squal;
 u8 data_counter;
+
+
+
+
 // 更新激光高度
 void get_height(void)
 {

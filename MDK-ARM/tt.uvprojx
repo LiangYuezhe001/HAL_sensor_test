@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F103xE</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;     ../Drivers/STM32F1xx_HAL_Driver/Inc;     ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;     ../Drivers/CMSIS/Device/ST/STM32F1xx/Include;     ../Drivers/CMSIS/Include;     ..\Drivers\mydriver;     ..\math;     ..\Drivers\VL53L1X;     ..\Drivers\VL53L1X\vl53l1_platform;     ..\Drivers\mydriver\laser;     ..\Drivers\mydriver\matlab</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include;..\Drivers\mydriver;..\math;..\Drivers\VL53L1X;..\Drivers\VL53L1X\vl53l1_platform;..\Drivers\mydriver\laser;..\Drivers\mydriver\matlab;..\Drivers\mydriver\Fusion</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -706,6 +706,31 @@
               <FileName>send2matlab.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\Drivers\mydriver\matlab\send2matlab.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>mahony_fusion</GroupName>
+          <Files>
+            <File>
+              <FileName>FusionAhrs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\mydriver\Fusion\FusionAhrs.c</FilePath>
+            </File>
+            <File>
+              <FileName>FusionCompass.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\mydriver\Fusion\FusionCompass.c</FilePath>
+            </File>
+            <File>
+              <FileName>FusionOffset.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\mydriver\Fusion\FusionOffset.c</FilePath>
+            </File>
+            <File>
+              <FileName>mahony.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\mydriver\Fusion\mahony.c</FilePath>
             </File>
           </Files>
         </Group>
