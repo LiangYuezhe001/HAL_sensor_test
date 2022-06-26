@@ -1,6 +1,6 @@
 # HAL_sensor_test
  stm32 hal库的传感器测试
- 包括pwm3901，9250。。。
+ 包括pwm3901，9250，HSCDTD008A，
 
 #3901
 MOSI->PA7
@@ -37,4 +37,6 @@ CSB->D6->PB6
 SCL->D14->PB14
 SDA->D12->PB12
 
-#mag
+#HSCDTD008A
+SCL->PC0
+SDA->PC13
